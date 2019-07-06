@@ -1,9 +1,9 @@
-var express=require("express");
-var app=express();
-var bodyParser=require("body-parser");
-var mongoose=require("mongoose");
+var express = require("express"),
+    app = express(),
+	bodyParser = require("body-parser"),
+	mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost/clinicapp");
+mongoose.connect("mongodb://localhost/clinicapp", { useNewUrlParser: true });
 app.use(express.static('pubic'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
@@ -14,9 +14,17 @@ var doctorSchema = new mongoose.Schema({
 	email: String,
 	password: String,
 	authenticationKey: String
- });	
+ });
+ 
+var patientSchema = new mongoose.Schema({
+	fname: String,
+	lname: String,
+	email: String,
+	password: String
+});
 
-var doctor = mongoose.model("doctor", doctorSchema);
+var doctor = mongoose.model("doctor", doctorSchema),
+	patient = mongoose.model("patient", patientSchema);
 
 app.get("/",function(req,res){
 		res.render("homepage");
@@ -68,10 +76,22 @@ app.post("/dsignup",function(req,res){
 });
 
 app.post("/psignup",function(req,res){
-	res.redirect("/signin");
-	console.log("a patient has signed up");
-	console.log("name : "+req.body.fname);
-	console.log("password : "+req.body.password);
+	// res.redirect("/signin");
+	// console.log("a patient has signed up");
+	// console.log("name : "+req.body.fname);
+	// console.log("password : "+req.body.password);
+	patient.create({
+		fname: req.body.fname,
+		lname: req.body.lname,
+		email: req.body.email,
+		password: req.body.password
+	}, function(err, back) {
+		if(err) console.log(err)
+		else {
+			console.log("Patient added");
+			res.redirect("/signin");
+		}
+	})
 });
 
 app.get("/doctors",function(req,res){
