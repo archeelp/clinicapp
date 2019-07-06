@@ -1,0 +1,73 @@
+<% include partials/header %>
+		<div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
+			<div class="inner">
+				<form method="POST" action="/psignup" >
+					<h3>Registration Form</h3>
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">First Name</label>
+							<input name="fname" type="text" class="form-control" placeholder="First Name" required>
+						</div>
+						<div class="form-wrapper">
+							<label for="">Last Name</label>
+							<input name="lname" type="text" class="form-control" placeholder="Last Name" required>
+						</div>
+					</div>
+					<div class="form-wrapper">
+						<label for="">Email</label>
+						<input name="email" type="text" class="form-control" placeholder="abcd@mailme.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+					</div>
+					<div class="form-wrapper">
+						<label for="pw1">Password</label>
+						<input name="password" id="pw1" type="password" class="form-control" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" >
+					<div class="form-wrapper">
+					<label>Atleast 8 characters including atleast 1 number 1 uppercase and 1 lowercase character no special character allowed</label>
+					</div>
+					<button id="b">SHOW</button>
+					</div>
+					<div class="form-wrapper">
+						<label for="pw2">Confirm Password</label>
+						<input id="pw2" type="password" class="form-control" placeholder="Rewrite Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" >
+					</div>
+					<div id="match"></div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" required> I accept the Terms of Use & Privacy Policy.
+							<span class="checkmark"></span>
+						</label>
+					</div>
+					<script src="signup.ejs" >
+						console.log("javascript loaded");
+							</script>
+					<button>Register Now</button>
+				</form>
+			</div>
+		</div>
+		<script>
+		var pw1 = document.querySelector("#pw1"),
+				pw2 = document.querySelector("#pw2");
+				match = document.querySelector("#match");
+				show = false;
+				button = document.querySelector("#b");
+
+			pw2.addEventListener("change" , function () {
+				if (pw1.value != this.value) {
+					match.textContent = "Passwords don't match";
+					pw1.value = "";
+					pw2.value = "";
+				}
+				else{	match.textContent="";}
+			});
+
+			button.addEventListener("click", function () {
+				if (!show) {
+					pw1.setAttribute("type", "text");
+					button.textContent = "HIDE";
+				}
+				else {
+					pw1.setAttribute("type", "password");
+					button.textContent = "SHOW";
+				}
+				show = !show;
+			})</script>
+	<% include partials/footer %>
