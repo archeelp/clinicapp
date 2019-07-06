@@ -13,7 +13,8 @@ var doctorSchema = new mongoose.Schema({
 	lname: String,
 	email: String,
 	password: String,
-	authenticationKey: String
+	authenticationKey: String,
+	description: String
  });	
 
 var doctor = mongoose.model("doctor", doctorSchema);
@@ -62,10 +63,26 @@ app.post("/dsignup",function(req,res){
         if(err){
             console.log(err);
         } else {
-            res.redirect("/signin");
+            res.redirect("/dsignup/"+newlyCreated.id);
         }
     });
 });
+
+app.get("/dsignup/:id",function(req,res){
+	var pm = { id : req.params.id };
+	res.render("docdes",{pm:pm});
+});
+
+app.post("/dsignup/:id", function(req, res){
+    doctor.findById(req.params.id, function(err, founddoctor){
+        if(err){
+            console.log(err);
+        } else {
+			founddoctor.description=req.body.description;
+			res.redirect("/signin")
+        }
+    });
+})
 
 app.post("/psignup",function(req,res){
 	res.redirect("/signin");
@@ -83,6 +100,16 @@ app.get("/doctors",function(req,res){
 		}
 	})
 });
+
+app.get("/doctors/:id", function(req, res){
+    doctor.findById(req.params.id, function(err, founddoctor){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("show", {doctor: founddoctor});
+        }
+    });
+})
 
 app.listen(3000, function(){
 	console.log("The Clinicapp Server Has Started!");
