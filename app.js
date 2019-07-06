@@ -91,7 +91,7 @@ app.post("/psignup",function(req,res){
 			console.log("Patient added");
 			res.redirect("/signin");
 		}
-	})
+	});
 });
 
 app.get("/doctors",function(req,res){
