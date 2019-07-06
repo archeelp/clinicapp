@@ -79,7 +79,8 @@ app.post("/dsignup/:id", function(req, res){
             console.log(err);
         } else {
 			founddoctor.description=req.body.description;
-			res.redirect("/signin")
+			console.log(founddoctor.description);
+			res.redirect("/signin");
         }
     });
 })
