@@ -16,6 +16,15 @@ var doctorSchema = new mongoose.Schema({
 	authenticationKey: String,
 	description: String
  });	
+
+ var newDoctor = {
+	fname: String,
+	lname: String,
+	email: String,
+	password: String,
+	authenticationKey: String,
+	description: String
+ };
  
 var patientSchema = new mongoose.Schema({
 	fname: String,
@@ -56,42 +65,29 @@ app.get("/logout",function(req,res){
 });
 
 app.post("/dsignup",function(req,res){
-	var fname = req.body.fname;
-    var lname = req.body.lname;
-	var email = req.body.email;
-	var password = req.body.password;
-	var authenticationKey = req.body.authenticationKey;
-    var newDoctor = {
-		fname: fname,
-		lname: lname,
-		email: email,
-		password: password,
-		authenticationKey: authenticationKey}
-    doctor.create(newDoctor, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect("/dsignup/"+newlyCreated.id);
-        }
-    });
+	newDoctor.fname = req.body.fname;
+    newDoctor.lname = req.body.lname;
+	newDoctor.email = req.body.email;
+	newDoctor.password = req.body.password;
+	newDoctor.authenticationKey = req.body.authenticationKey;
+	res.redirect("/dsignup/docdes");
 });
 
-app.get("/dsignup/:id",function(req,res){
-	var pm = { id : req.params.id };
-	res.render("docdes",{pm:pm});
+app.get("/dsignup/docdes",function(req,res){
+	res.render("docdes");
 });
 
-app.post("/dsignup/:id", function(req, res){
-    doctor.findById(req.params.id, function(err, founddoctor){
-        if(err){
-            console.log(err);
-        } else {
-			founddoctor.description=req.body.description;
-			console.log(founddoctor.description);
-			res.redirect("/signin");
-        }
-    });
-})
+app.post("/dsignup/docdes", function(req, res){
+			newDoctor.description=req.body.description;
+			doctor.create(newDoctor, function(err, newlyCreated){
+				if(err){
+					console.log(err);
+				} else {
+					res.redirect("/signin");
+				}
+			});
+			
+});
 
 app.post("/psignup",function(req,res){
 	// res.redirect("/signin");
