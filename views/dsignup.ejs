@@ -1,7 +1,39 @@
 <% include partials/header %>
-		<div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
+<style>
+	h3 {
+		margin-bottom: 20px;
+		font-family: 'DM Serif Text', serif;
+		font-size: 300%;
+		text-align: center;
+	}
+	.container {
+		width: 60%;
+	}
+	.container .inner #signup input {
+		border-radius: 20px;
+		display: block;
+	}
+	label {
+		margin: 5px;
+	}
+	#register {
+		height: 40px;
+		width: 20%;
+        background: #0062ff;
+        border: none;
+        color: white;
+        border-radius: 10px;
+		font-size: 125%;
+	}
+
+	#b {
+		border: none;
+		background: #dddddd;
+	}
+</style>
+		<div class="container" style="background-image: url('images/bg-registration-form-2.jpg');">
 			<div class="inner">
-				<form method="POST" action="/dsignup" >
+				<form id="signup" method="POST" action="/dsignup" >
 					<h3>Registration Form</h3>
 					<div class="form-group">
 						<div class="form-wrapper">
@@ -40,7 +72,7 @@
 							<span class="checkmark"></span>
 						</label>
 					</div>
-					<button>Register Now</button>
+					<button id="register">Register Now</button>
 				</form>
 			</div>
 		</div>
