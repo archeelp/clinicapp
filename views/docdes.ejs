@@ -1,17 +1,92 @@
 <% include partials/header %>
+<style>
+    #button {
+        text-align: center;
+    }
+    input[type="checkbox"] {
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+    .check {
+        padding-left: 50px;
+    }
+    input[type="number"] {
+        width: 50px;
+    }
+    #submitButton {
+        height: 40px;
+        background: #0062ff;
+        border: none;
+        color: white;
+        border-radius: 18px;
+        font-weight: bold;
+        font-size: 125%;
+    }
+    .notVisible {
+        display: none;
+    }
+</style>
 <div class="container">
     <div class="row">
-        <h1 style="text-align: center">Add Description About You</h1>
-        <div style="width: 30%; margin: 25px auto;">
-            <form action="/dsignup/<%= pm.id %>" method="POST">
+        <h1 style="text-align: center">Add a brief description</h1>
+        <div style="width: 70%; margin: 25px auto;">
+            <form action="/dsignup/docdes" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="description" placeholder="description">
+                    <input class="form-control" type="text" name="description" placeholder="Description" required>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                <fieldset>
+                    <legend>Choose your timings</legend>
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>Monday</td>
+                                <td class="check"><input id="CHECK" type="checkbox"></td>
+                                <td class="check"><label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Tuesday</td>
+                                    <td class="check"><input type="checkbox"></td>
+                                    <td class="check"><label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Wednesday</td>
+                                    <td class="check"><input type="checkbox"></td>
+                                    <td class="check"> <label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>
+                            <tr>
+                                <td>Thursday</td>
+                                <td class="check"><input type="checkbox"></td>
+                                <td class="check"><label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Friday</td>
+                                    <td class="check"><input type="checkbox"></td>
+                                    <td class="check"> <label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                                </tr>
+                            <tr>
+                                <td>Saturday</td>
+                                <td class="check"><input type="checkbox"></td>
+                                <td class="check"><label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>
+                            <tr>
+                                <td>Sunday</td>
+                                <td class="check"><input type="checkbox"></td>
+                                <td class="check"><label>From</label> <input type="number"> <label>To</label> <input type="number"></td>
+                            </tr>    
+                        </table>
+                    </div>
+                </fieldset>
+                <div style="text-align: center">
+                    <button style="width: 20%" id="submitButton">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll("input[type=\"number\"]").forEach(function(el) {
+        el.min = 9;
+        el.max = 21;
+    })
+</script>
 <% include partials/footer %>
