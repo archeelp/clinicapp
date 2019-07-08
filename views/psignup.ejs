@@ -1,5 +1,33 @@
 <% include partials/header %>
-		<div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
+<style>
+	h3 {
+		margin-bottom: 20px;
+		font-family: 'DM Serif Text', serif;
+		font-size: 300%;
+		text-align: center;
+	}
+	.container {
+		width: 60%;
+	}
+	.container .inner #signup input {
+		border-radius: 20px;
+		display: block;
+	}
+	label {
+		margin: 5px;
+	}
+	#register {
+		height: 40px;
+		width: 20%;
+        background: #0062ff;
+        border: none;
+        color: white;
+        border-radius: 10px;
+		font-size: 125%;
+	}
+
+</style>
+		<div class="container" style="background-image: url('images/bg-registration-form-2.jpg');">
 			<div class="inner">
 				<form method="POST" action="/psignup" >
 					<h3>Registration Form</h3>
@@ -39,7 +67,7 @@
 					<script src="signup.ejs" >
 						console.log("javascript loaded");
 							</script>
-					<button>Register Now</button>
+					<button id="register">Register Now</button>
 				</form>
 			</div>
 		</div>
