@@ -30,7 +30,7 @@
     <div class="row">
         <h1 style="text-align: center">Add a brief description</h1>
         <div style="width: 70%; margin: 25px auto;">
-            <form action="/dsignup/docdes" method="POST">
+            <form action="/dsignup/<%= pm.id %>" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="description" placeholder="Description" required>
                 </div>
@@ -40,38 +40,38 @@
                         <table>
                             <tr>
                                 <td>Monday</td>
-                                <td class="pding"><input class="chbx" id="CHECK" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="doctor[monday.from]" type="number"> <label>To</label> <input name="doctor[monday.to]" type="number"></td>
+                                <td class="pding"><input class="chbx" id="CHECK" name="id0" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id0from" type="number"> <label>To</label> <input name="id0to" type="number"></td>
                             </tr>
                             <tr>
                                     <td>Tuesday</td>
-                                    <td class="pding"><input class="chbx" type="checkbox"></td>
-                                    <td class="notVisible time pding"><label>From</label> <input name="doctor[tuesday.from]" type="number"> <label>To</label> <input name="doctor[tuesday.to]" type="number"></td>
+                                    <td class="pding"><input class="chbx" name="id1" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id1from" type="number"> <label>To</label> <input name="id1to" type="number"></td>
                             </tr>
                             <tr>
                                     <td>Wednesday</td>
-                                    <td class="pding"><input class="chbx" type="checkbox"></td>
-                                    <td class="notVisible time pding"> <label>From</label> <input name="doctor[wednesday.from]" type="number"> <label>To</label> <input name="doctor[wednesday.to]" type="number"></td>
+                                    <td class="pding"><input class="chbx" name="id2" type="checkbox"></td>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id2from" type="number"> <label>To</label> <input name="id2to" type="number"></td>
                             </tr>
                             <tr>
                                 <td>Thursday</td>
-                                <td class="pding"><input class="chbx" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="doctor[thursday.from]" type="number"> <label>To</label> <input name="doctor[thursday.to]" type="number"></td>
+                                <td class="pding"><input class="chbx" name="id3" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id3from" type="number"> <label>To</label> <input name="id3to" type="number"></td>
                             </tr>
                             <tr>
                                     <td>Friday</td>
-                                    <td class="pding"><input class="chbx" type="checkbox"></td>
-                                    <td class="notVisible time pding"> <label>From</label> <input name="doctor[friday.from]" type="number"> <label>To</label> <input name="doctor[friday.to]" type="number"></td>
+                                    <td class="pding"><input class="chbx" name="id4" type="checkbox"></td>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id4from" type="number"> <label>To</label> <input name="id4to" type="number"></td>
                                 </tr>
                             <tr>
                                 <td>Saturday</td>
-                                <td class="pding"><input class="chbx" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="doctor[saturday.from]" type="number"> <label>To</label> <input name="doctor[saturday.to]" type="number"></td>
+                                <td class="pding"><input class="chbx" name="id5" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id5from" type="number"> <label>To</label> <input name="id5to" type="number"></td>
                             </tr>
                             <tr>
                                 <td>Sunday</td>
-                                <td class="pding"><input class="chbx" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="doctor[sunday.from]" type="number"> <label>To</label> <input name="doctor[sunday.to]" type="number"></td>
+                                <td class="pding"><input class="chbx" name="id6" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id6from" type="number"> <label>To</label> <input name="id6to" type="number"></td>
                             </tr>    
                         </table>
                     </div>

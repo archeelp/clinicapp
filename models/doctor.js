@@ -6,6 +6,13 @@ var doctorSchema = new mongoose.Schema({
 	password: String,
 	authenticationKey: String,
     description: String,
+    schedule : [
+        {
+            day : String,
+            from : String,
+            to : String
+        }
+    ],
     appointments: [
         {
            type: mongoose.Schema.Types.ObjectId,
