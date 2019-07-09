@@ -30,9 +30,9 @@
     <div class="row">
         <h1 style="text-align: center">Add a brief description</h1>
         <div style="width: 70%; margin: 25px auto;">
-            <form action="/dsignup/<%= pm.id %>" method="POST">
+            <form id="form" action="/dsignup/<%= pm.id %>" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="description" placeholder="Description" required>
+                    <textarea form="form" class="form-control" name="description" placeholder="Description" required></textarea>
                 </div>
                 <fieldset>
                     <legend>Choose your timings</legend>
