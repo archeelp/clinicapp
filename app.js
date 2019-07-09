@@ -5,6 +5,7 @@ var express = require("express"),
 	patient = require("./models/patient"),
 	doctor = require("./models/doctor"),
 	appointment = require("./models/appointment"),
+	review = require("./models/review"),
 	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 
 mongoose.connect("mongodb://localhost/clinicapp", { useNewUrlParser: true });
@@ -67,7 +68,7 @@ app.post("/dsignup/:id", function(req, res){
 			//	var f=iden +"from";
 			//	var t=iden +"to";
 			//	console.log(req.body.iden);
-				if(req.body.id0 == "on")
+			if(req.body.id0 == "on")
 				{
 					founddoctor.schedule.push({
 						day :days[0],
@@ -121,7 +122,7 @@ app.post("/dsignup/:id", function(req, res){
 						from :req.body.id6from,
 						to :req.body.id6to
 				});
-				}
+                }
 			//}
 			founddoctor.save();
 			res.redirect("/signin");
@@ -150,14 +151,45 @@ app.get("/doctors",function(req,res){
 });
 
 app.get("/doctors/:id", function(req, res){
-    doctor.findById(req.params.id, function(err, founddoctor){
+	doctor.findById(req.params.id).populate("reviews").exec(function(err, founddoctor){
         if(err){
             console.log(err);
         } else {
             res.render("show", {doctor: founddoctor});
         }
     });
-})
+});
+
+app.get("/doctors/:id/newreview", function(req, res){
+    // find doctor by id
+    doctor.findById(req.params.id, function(err, doctor){
+        if(err){
+            console.log(err);
+        } else {
+             res.render("newreview", {doctor: doctor});
+        }
+    })
+});
+
+app.post("/doctors/:id/newreview", function(req, res){
+	doctor.findById(req.params.id, function(err, doctor){
+		if(err){
+			console.log(err);
+			res.redirect("/doctors");
+		} else {
+		 review.create(req.body.review, function(err, review){
+			if(err){
+				console.log(err);
+			} else {
+				doctor.reviews.push(review);
+				doctor.save();
+				res.redirect("/doctors/" + doctor._id);
+			}
+		 });
+		}
+	});
+ });
+ 
 
 app.listen(3000, function(){
 	console.log("The Clinicapp Server Has Started!");

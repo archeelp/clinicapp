@@ -1,6 +1,32 @@
 <% include partials/header %>
-<h1><%=doctor.fname%></h1>
-<h1><%=doctor.lname%></h1>
-<h1><%=doctor.email%></h1>
+<h1><%= "Doctor " + doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></h1>
+<p><%= "EMAIL : " + doctor.email %></p>
+<h3><b>ABOUT DOCTOR <%= doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></b></h3>
 <p><%= doctor.description %></p>
+<h3>AVAILABILITY TIMINGS</h3>
+<table class="table table-borderless" >
+    <tr>
+      <th>Day</th>
+      <th>From</th> 
+      <th>To</th>
+    </tr>
+<% doctor.schedule.forEach(function(schedule){ %>
+    <tr>
+        <td><%= schedule.day.toUpperCase() %></td>
+        <td><%= schedule.from %></td> 
+        <td><%= schedule.to %></td>
+    </tr>
+<% }) %>
+</table>
+<h3>REVIEWS</h3>
+
+<% doctor.reviews.forEach(function(review){ %>
+    <p>
+        <strong><%= review.author %></strong> - <%= review.text %>
+    </p>
+<% }) %>
+
+<p>
+    <a class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
+</p>
 <% include partials/footer %>

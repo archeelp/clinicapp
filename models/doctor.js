@@ -13,6 +13,12 @@ var doctorSchema = new mongoose.Schema({
             to : String
         }
     ],
+    reviews: [
+        {
+           type: mongoose.Schema.Types.ObjectId,
+           ref: "review"
+        }
+     ],
     appointments: [
         {
            type: mongoose.Schema.Types.ObjectId,
