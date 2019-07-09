@@ -1,32 +1,61 @@
 <% include partials/header %>
-<h1><%= "Doctor " + doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></h1>
-<p><%= "EMAIL : " + doctor.email %></p>
-<h3><b>ABOUT DOCTOR <%= doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></b></h3>
-<p><%= doctor.description %></p>
-<h3>AVAILABILITY TIMINGS</h3>
-<table class="table table-borderless" >
-    <tr>
-      <th>Day</th>
-      <th>From</th> 
-      <th>To</th>
-    </tr>
-<% doctor.schedule.forEach(function(schedule){ %>
-    <tr>
-        <td><%= schedule.day.toUpperCase() %></td>
-        <td><%= schedule.from %></td> 
-        <td><%= schedule.to %></td>
-    </tr>
-<% }) %>
-</table>
-<h3>REVIEWS</h3>
+<link href="https://fonts.googleapis.com/css?family=Noto+Serif+TC&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<style>
+    h1 {
+        font-family: 'Open Sans', sans-serif;
+    }
+    #description {
+        font-size: 125%;
+        font-weight: 500;
+    }
+    .description {
+        border: 1px solid rgba(0,0,0,0.2);
+        padding-left: 5px;
+    }
+    th {
+        font-size: 125%;
+        text-align: left;
+    }
+    #button {
+        font-weight: bold;
+        padding: auto;
+        font-size: 110%;
+    }
+</style>
+<div class = container>
+    <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
+    <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
+    <div class="description">
+        <h3><b>ABOUT DOCTOR <%= doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></b></h3>
+        <p id="description"><%= doctor.description %></p>
+    </div>
+    <fieldset>
+        <h3>Available Timings</h3>
+        <table class="table table-borderless" >
+            <tr>
+            <th>Day</th>
+            <th>From</th> 
+            <th>To</th>
+            </tr>
+        <% doctor.schedule.forEach(function(schedule){ %>
+            <tr>
+                <td><%= schedule.day.toUpperCase() %></td>
+                <td><%= schedule.from + ":00" %></td> 
+                <td><%= schedule.to + ":00" %></td>
+            </tr>
+        <% }) %>
+        </table>
+    </fieldset>
 
-<% doctor.reviews.forEach(function(review){ %>
+    <% doctor.reviews.forEach(function(review){ %>
+        <p>
+            <strong><%= review.author %></strong> - <%= review.text %>
+        </p>
+    <% }) %>
+
     <p>
-        <strong><%= review.author %></strong> - <%= review.text %>
+        <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
     </p>
-<% }) %>
-
-<p>
-    <a class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
-</p>
+</div>
 <% include partials/footer %>
