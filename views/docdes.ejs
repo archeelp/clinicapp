@@ -25,6 +25,20 @@
     .notVisible {
         display: none;
     }
+    #textarea {
+        width: 100%;
+        height: 125px;
+        font-size: 2.0rem;
+        text-align: center;
+        padding: 45px;
+    }
+    #textarea:focus {
+        width: 100%;
+        height: 125px;
+        font-size: 2.0rem;
+        padding: 5px;
+        text-align: left;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -32,7 +46,7 @@
         <div style="width: 70%; margin: 25px auto;">
             <form id="form" action="/dsignup/<%= pm.id %>" method="POST">
                 <div class="form-group">
-                    <textarea form="form" class="form-control" name="description" placeholder="Description" required></textarea>
+                    <textarea id="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
                 </div>
                 <fieldset>
                     <legend>Choose your timings</legend>
@@ -89,33 +103,70 @@
         el.max = 21;
     })
 
-    document.querySelectorAll(".chbx")[0].addEventListener("click", function() {
-        document.querySelectorAll(".time")[0].classList.toggle("notVisible");
+    var chbxs = document.querySelectorAll(".chbx"),
+        timeIn = document.querySelectorAll(".time");
+
+    chbxs[0].addEventListener("click", function() {
+        timeIn[0].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[1].addEventListener("click", function() {
-        document.querySelectorAll(".time")[1].classList.toggle("notVisible");
+    chbxs[1].addEventListener("click", function() {
+        timeIn[1].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[2].addEventListener("click", function() {
-        document.querySelectorAll(".time")[2].classList.toggle("notVisible");
+    chbxs[2].addEventListener("click", function() {
+        timeIn[2].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[3].addEventListener("click", function() {
-        document.querySelectorAll(".time")[3].classList.toggle("notVisible");
+    chbxs[3].addEventListener("click", function() {
+        timeIn[3].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[4].addEventListener("click", function() {
-        document.querySelectorAll(".time")[4].classList.toggle("notVisible");
+    chbxs[4].addEventListener("click", function() {
+        timeIn[4].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[5].addEventListener("click", function() {
-        document.querySelectorAll(".time")[5].classList.toggle("notVisible");
+    chbxs[5].addEventListener("click", function() {
+        timeIn[5].classList.toggle("notVisible");
     })
 
-    document.querySelectorAll(".chbx")[6].addEventListener("click", function() {
-        document.querySelectorAll(".time")[6].classList.toggle("notVisible");
-    })
+    chbxs[6].addEventListener("click", function() {
+        timeIn[6].classList.toggle("notVisible");
+    });
+
+    // var txt = document.querySelector("body #textarea");
+    // txt.addEventListener("click", function() {
+    //     if(!this.value) txt.setAttribute("placeholder", "");
+    // });
+
+    // document.querySelector("body").addEventListener("click", function () {
+    //     if(!this.value) txt.setAttribute("placeholder", "Description");
+    // });
+
+    // document.querySelector("body").addEventListener("keypress", function() {
+    //     if(!this.value) txt.setAttribute("placeholder", "Description");
+    // });
+    // function typed() {
+    //     if(txt.value) {
+    //     txt.style.padding = "5px";
+    //     txt.style.textAlign = "left";
+    //     txt.setAttribute("placeholder", "")
+    //     }
+    //     else {
+    //         txt.style.padding = "45px";
+    //         txt.style.textAlign = "center"
+    //         txt.setAttribute("placeholder", "Description")
+    //     }
+    // }
+
+    // var body = document.querySelector("body");
+    // body.addEventListener("keyup", typed);
+    // body.addEventListener("click", typed);
+    // txt.addEventListener("click", function() {
+    //     this.style.padding = "5px";
+    //     this.style.textAlign = "left";
+    //     this.setAttribute("placeholder", "");
+    // })
     
 </script>
 <% include partials/footer %>
