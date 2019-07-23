@@ -1,9 +1,14 @@
-var mongoose =require("mongoose");
-var doctorSchema = new mongoose.Schema({
-	fname: String,
+var mongoose = require("mongoose");
+var passportLocalMongoose = require("passport-local-mongoose");
+
+var userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    type: String,
+    fname: String,
 	lname: String,
-	email: String,
-	password: String,
+    email: String,
+    contactnumber: String,
 	authenticationKey: String,
     description: String,
     schedule : [
@@ -25,5 +30,8 @@ var doctorSchema = new mongoose.Schema({
            ref: "appointment"
         }
      ]
- });	
- module.exports=mongoose.model("doctor", doctorSchema);
+});
+
+userSchema.plugin(passportLocalMongoose)
+
+module.exports = mongoose.model("user", userSchema);

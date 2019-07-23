@@ -47,16 +47,23 @@
         <% }) %>
         </table>
     </fieldset>
+    <% if((!currentuser)||(currentuser.type=="patient")) {%>
+    <div>
+            <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
+    </div>
+    <% } %>
     <h5>REVIEWS</h5>
     <fieldset class="container description">
     <% doctor.reviews.forEach(function(review){ %>
         <p>
-            <strong><%= review.author %></strong> - <%= review.text %>
+            <strong><%= review.author.username %></strong> - <%= review.text %>
         </p>
     <% }) %>
     </fieldset>
+    <% if((!currentuser)||(currentuser.type=="patient")) {%>
     <p>
         <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
     </p>
+    <% }%>
 </div>
 <% include partials/footer %>

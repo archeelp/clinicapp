@@ -1,3 +1,22 @@
 <% include partials/header %>
-<h1>you are in the doctor home</h1>
+<fieldset>
+        <h3>Appointment Schedule</h3>
+        <table class="table table-borderless" >
+            <tr>
+            <th>Patient Name</th>
+            <th>Contact Number</th>
+            <th>Date</th> 
+            <th>Details</th>
+            </tr>
+        <% doctor.appointments.forEach(function(appointment){ %>
+            <tr>
+                <% var month = appointment.appointmentdate.getMonth() +1; %>
+                <td><%= appointment.patientname.toUpperCase() %></td>
+                <td><%= appointment.patientcn %></td>
+                <td><%= appointment.appointmentdate.getDate() + "/" + month + "/" + appointment.appointmentdate.getFullYear() %></td> 
+                <td><a href="/doctorhome/<%= appointment._id %>" class="btn btn-primary">View Details</a></td>
+            </tr>
+        <% }) %>
+        </table>
+    </fieldset>
 <% include partials/footer %>

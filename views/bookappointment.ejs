@@ -1,0 +1,59 @@
+<% include partials/header %>
+<link href="https://fonts.googleapis.com/css?family=Voces&display=swap" rel="stylesheet">
+<style>
+    .container {
+        border: 1px solid rgba(1,1,1,0.2);
+    }
+    h1 {
+        font-family: 'Voces', cursive;
+    }
+    #btn {
+        font-size: 120;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <h1 style="text-align: center">Book An Appointment With Dr <%= doctor.fname %></h1>
+        <div style="width: 30%; margin: 25px auto;">
+            <form action="/doctors/<%= doctor._id %>/bookappointment" method="POST">
+                <fieldset>
+                        <h3>Available Timings</h3>
+                        <table class="table table-borderless" >
+                            <tr>
+                            <th>Select Day</th>
+                            <th>Day</th>
+                            <th>Date</th>
+                            <th>From</th> 
+                            <th>To</th>
+                            </tr>
+                        <%
+                        days =["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+                        for(i=0;i<7;i++)
+                        {
+                            var d = new Date();
+                            d.setTime(Date.now()+i*24*60*60*1000);
+                            var month=d.getMonth()+1;
+                            doctor.schedule.forEach(function(schedule){ 
+                            if(schedule.day == days[d.getDay()])
+                            { %>
+                                <tr>
+                                        <td><input type="radio" value="<%= d %>" name="appointmentdate"</td>
+                                        <td><%= schedule.day.toUpperCase() %></td>
+                                        <td><%= d.getDate() + "/" + month + "/" + d.getFullYear() %></td>
+                                        <td><%= schedule.from + ":00" %></td> 
+                                        <td><%= schedule.to + ":00" %></td>
+                                </tr>
+                           <% }
+                            })
+                        }
+                             %>
+                        </table>
+                    </fieldset>
+                    <div class="form-group">
+                            <button id="btn" class="btn btn-lg btn-primary btn-block">Confirm Appointment</button>
+                        </div>
+            </form>
+        </div>
+    </div>
+</div>
+<% include partials/footer %>

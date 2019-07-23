@@ -17,10 +17,7 @@
         <div style="width: 30%; margin: 25px auto;">
             <form action="/doctors/<%= doctor._id %>/newreview" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="review[text]" placeholder="Text">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="review[author]" placeholder="Your name">
+                    <input class="form-control" type="text" name="text" placeholder="Write Your Review">
                 </div>
                 <div class="form-group">
                     <button id="btn" class="btn btn-lg btn-primary btn-block">Submit</button>

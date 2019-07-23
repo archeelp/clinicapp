@@ -44,7 +44,7 @@
     <div class="row">
         <h1 style="text-align: center">Add a brief description</h1>
         <div style="width: 70%; margin: 25px auto;">
-            <form id="form" action="/dsignup/<%= pm.id %>" method="POST">
+            <form id="form" action="/details/<%= pm.id %>" method="POST">
                 <div class="form-group">
                     <textarea id="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
                 </div>
@@ -133,40 +133,5 @@
     chbxs[6].addEventListener("click", function() {
         timeIn[6].classList.toggle("notVisible");
     });
-
-    // var txt = document.querySelector("body #textarea");
-    // txt.addEventListener("click", function() {
-    //     if(!this.value) txt.setAttribute("placeholder", "");
-    // });
-
-    // document.querySelector("body").addEventListener("click", function () {
-    //     if(!this.value) txt.setAttribute("placeholder", "Description");
-    // });
-
-    // document.querySelector("body").addEventListener("keypress", function() {
-    //     if(!this.value) txt.setAttribute("placeholder", "Description");
-    // });
-    // function typed() {
-    //     if(txt.value) {
-    //     txt.style.padding = "5px";
-    //     txt.style.textAlign = "left";
-    //     txt.setAttribute("placeholder", "")
-    //     }
-    //     else {
-    //         txt.style.padding = "45px";
-    //         txt.style.textAlign = "center"
-    //         txt.setAttribute("placeholder", "Description")
-    //     }
-    // }
-
-    // var body = document.querySelector("body");
-    // body.addEventListener("keyup", typed);
-    // body.addEventListener("click", typed);
-    // txt.addEventListener("click", function() {
-    //     this.style.padding = "5px";
-    //     this.style.textAlign = "left";
-    //     this.setAttribute("placeholder", "");
-    // })
-    
 </script>
 <% include partials/footer %>

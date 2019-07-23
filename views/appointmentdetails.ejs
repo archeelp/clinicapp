@@ -1,0 +1,81 @@
+<% include partials/header %>
+<style>
+    #button {
+        text-align: center;
+    }
+    input[type="checkbox"] {
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+    .pding {
+        padding-left: 50px;
+    }
+    input[type="number"] {
+        width: 50px;
+    }
+    #submitButton {
+        height: 40px;
+        background: #0062ff;
+        border: none;
+        color: white;
+        border-radius: 18px;
+        font-weight: bold;
+        font-size: 125%;
+    }
+    .notVisible {
+        display: none;
+    }
+    #textarea {
+        width: 100%;
+        height: 125px;
+        font-size: 2.0rem;
+        text-align: center;
+        padding: 45px;
+    }
+    #textarea:focus {
+        width: 100%;
+        height: 125px;
+        font-size: 2.0rem;
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div style="width: 70%; margin: 25px auto;">
+            <% if(appointment.status == "NC"){%>
+                <form id="form" action="/doctorhome/<%= pm.id %>" method="POST">
+                <div class="form-wrapper">
+						<label for="pw1">Appointment Time</label>
+						<input name="time" id="pw1" type="time" class="form-control" required >
+                </div>
+                <div style="text-align: center">
+                        <button name="status" value="C" style="width: 20%" id="submitButton">Accept</button>
+                        <button name="status" value="R" style="width: 20%" id="submitButton">Reject</button>
+                    </div>
+                </form><% }%>
+            <% if(appointment.status == "C"){%>
+            <form id="form" action="/doctorhome/<%= pm.id %>" method="POST">
+                <h1 style="text-align: center">Add Description</h1>
+                <div class="form-group">
+                    <textarea id="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
+                </div>
+
+                <h1 style="text-align: center">Add Prescription</h1>
+                <div class="form-group">
+                    <textarea id="textarea" form="form" class="form-control" name="prescription" placeholder="Description" required></textarea>
+                </div>
+
+                <div class="form-wrapper">
+						<label for="pw1">Add Bill Amount</label>
+						<input name="billamount" type="number" class="form-control" required >
+                </div>
+                
+                <div style="text-align: center">
+                    <button style="width: 20%" name="status" value="CNF" id="submitButton">Submit</button>
+                </div>
+            </form><% }%>
+        </div>
+    </div>
+</div>
+<% include partials/footer %>

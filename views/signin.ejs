@@ -61,11 +61,12 @@
     }
 </style>
 <div>
-    <form class ="box" action="#" method="POST">
+    <form class ="box" action="/signin" method="POST">
     <h1>Login</h1>
-    <input type="text" name="emailid" placeholder="Email Address">
+    <input type="text" name="username" placeholder="User Name">
     <input type="password" name="password" placeholder="Password">
     <input type="submit" name="submitButton" value="Login">
+    <a href="/signup">Signup As A New User</a>
     </form>
 </div>
 <% include partials/footer %>

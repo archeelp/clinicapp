@@ -1,14 +1,8 @@
 <% include partials/header %>
  <div class="container">
-     <header class="jumbotron">
-         <div class="container">
-             <h1>Welcome To Clinicapp</h1>
-             <p>View our Doctors</p>
-         </div>
-     </header>
-     
-     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% doctors.forEach(function(doctor){ %>
+      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% doctors.forEach(function(doctor){
+            if(doctor.type == "doctor") {%>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
                    <div class="caption">
@@ -19,7 +13,7 @@
                    </p>
                 </div>
             </div>
-        <% }); %>
+        <% }}); %>
     </div>
 </div>
 

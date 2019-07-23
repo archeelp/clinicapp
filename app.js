@@ -1,11 +1,14 @@
 var express = require("express"),
     app = express(),
 	bodyParser = require("body-parser"),
+	session = require("express-session"),
 	mongoose = require("mongoose"),
-	patient = require("./models/patient"),
-	doctor = require("./models/doctor"),
-	appointment = require("./models/appointment"),
+	passport = require("passport"),
+	LocalStrategy = require("passport-local"),
+	passportLocalMongoose = require("passport-local-mongoose"),
+	user = require("./models/user"),
 	review = require("./models/review"),
+	appointment = require("./models/appointment"),
 	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 
 mongoose.connect("mongodb://localhost/clinicapp", { useNewUrlParser: true });
@@ -13,61 +16,93 @@ app.use(express.static('pubic'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
 
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Once again Rusty wins cutest dog!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use("user",new LocalStrategy(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+
+
+app.use(function(req, res, next){
+res.locals.currentuser = req.user;
+next();
+});
+
 app.get("/",function(req,res){
 		res.render("homepage");
 });
 
-app.get("/dsignup",function(req,res){
-		res.render("dsignup");
-});
-
-app.get("/psignup",function(req,res){
-		res.render("psignup");
+app.get("/signup",function(req,res){
+		res.render("signup");
 });
 
 app.get("/signin",function(req,res){
 		res.render("signin");
 });
 
-app.get("/doctorhome",function(req,res){
-		res.render("doctorhome");
-});
-
-app.get("/patienthome",function(req,res){
-		res.render("patienthome");
-});
-
-app.get("/logout",function(req,res){
-	res.redirect("/");
-});
-
-app.post("/dsignup",function(req,res){
-    doctor.create(req.body.doctor, function(err, newlyCreated){
+app.get("/doctorhome",isLoggedIn,isdoctor,function(req,res){
+	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
         if(err){
             console.log(err);
         } else {
-            res.redirect("/dsignup/"+newlyCreated.id);
+            res.render("doctorhome", {doctor: founddoctor});
         }
     });
 });
 
-app.get("/dsignup/:id",function(req,res){
+app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
+	user.findById(req.user._id).populate("appointments").exec(function(err, foundpatient){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("patienthome", {patient: foundpatient});
+        }
+    });
+});
+
+app.get("/logout",isLoggedIn,function(req,res){
+	req.logout();
+	res.redirect("/");
+});
+
+app.post("/signup",function(req,res){
+	var suser = {
+		username: req.body.username,
+		type: req.body.type,
+		fname: req.body.fname,
+		lname: req.body.lname,
+		email: req.body.email,
+		contactnumber: req.body.contactnumber
+	};
+    user.register(suser, req.body.password ,function(err, newlyCreated){
+        if(err){
+			console.log(err);
+			return res.render("signup");
+		}
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/signin");
+		});
+    });
+});
+
+app.get("/details/:id",isLoggedIn,isdoctor,nodoctordes,function(req,res){
 	var pm = { id : req.params.id };
 	res.render("docdes",{pm:pm});
 });
 
-app.post("/dsignup/:id", function(req, res){
-    doctor.findById(req.params.id, function(err, founddoctor){
+app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes ,function(req, res){
+    user.findById(req.params.id, function(err, founddoctor){
         if(err){
             console.log("you have an error");
         } else {
 			founddoctor.description=req.body.description;
-			//for(i=0;i<6;i++)
-			//{
-			//	var iden="id" + i;
-			//	var f=iden +"from";
-			//	var t=iden +"to";
-			//	console.log(req.body.iden);
 			if(req.body.id0 == "on")
 				{
 					founddoctor.schedule.push({
@@ -123,25 +158,14 @@ app.post("/dsignup/:id", function(req, res){
 						to :req.body.id6to
 				});
                 }
-			//}
 			founddoctor.save();
-			res.redirect("/signin");
+			res.redirect("/doctorhome");
         }
     });
 });
 
-app.post("/psignup",function(req,res){
-	patient.create(req.body.patient, function(err, back) {
-		if(err) console.log(err)
-		else {
-			console.log("Patient added");
-			res.redirect("/signin");
-		}
-	});
-});
-
 app.get("/doctors",function(req,res){
-	doctor.find({}, function(err, alldoctors){
+	user.find({}, function(err, alldoctors){
 		if(err){
 			console.log(err);
 		} else {
@@ -151,7 +175,7 @@ app.get("/doctors",function(req,res){
 });
 
 app.get("/doctors/:id", function(req, res){
-	doctor.findById(req.params.id).populate("reviews").exec(function(err, founddoctor){
+	user.findById(req.params.id).populate("reviews").exec(function(err, founddoctor){
         if(err){
             console.log(err);
         } else {
@@ -160,9 +184,9 @@ app.get("/doctors/:id", function(req, res){
     });
 });
 
-app.get("/doctors/:id/newreview", function(req, res){
+app.get("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
     // find doctor by id
-    doctor.findById(req.params.id, function(err, doctor){
+		user.findById(req.params.id, function(err, doctor){
         if(err){
             console.log(err);
         } else {
@@ -171,8 +195,8 @@ app.get("/doctors/:id/newreview", function(req, res){
     })
 });
 
-app.post("/doctors/:id/newreview", function(req, res){
-	doctor.findById(req.params.id, function(err, doctor){
+app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
+	user.findById(req.params.id, function(err, doctor){
 		if(err){
 			console.log(err);
 			res.redirect("/doctors");
@@ -181,6 +205,10 @@ app.post("/doctors/:id/newreview", function(req, res){
 			if(err){
 				console.log(err);
 			} else {
+				review.author.id = req.user._id;
+			   review.author.username = req.user.username;
+			   review.text=req.body.text;
+               review.save();
 				doctor.reviews.push(review);
 				doctor.save();
 				res.redirect("/doctors/" + doctor._id);
@@ -189,7 +217,142 @@ app.post("/doctors/:id/newreview", function(req, res){
 		}
 	});
  });
+
+ app.get("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
+		user.findById(req.params.id, function(err, doctor){
+        if(err){
+            console.log(err);
+        } else {
+             res.render("bookappointment", {doctor: doctor});
+        }
+    })
+});
+
+app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
+	user.findById(req.params.id, function(err, doctor){
+		if(err){
+			console.log(err);
+			res.redirect("/doctors");
+		} else {
+		 appointment.create(
+			 {
+				patientname : req.user.fname,
+				doctorname : doctor.fname,
+				patientcn : req.user.contactnumber,
+				doctorcn : doctor.number,
+				appointmentdate :req.body.appointmentdate,
+				doctorid : doctor._id,
+				patientid : req.user._id
+				}, function(err, appointment){
+			if(err){
+				console.log(err);
+			} else {
+				appointment.save();
+				doctor.appointments.push(appointment);
+				doctor.save();
+				req.user.appointments.push(appointment);
+				req.user.save();
+				res.render("booked");
+			}
+		 });
+		}
+	});
+ });
  
+ app.post("/signin",nouser, passport.authenticate("user", 
+    {
+        successRedirect: "/",
+        failureRedirect: "/signin"
+    }), function(req, res){
+});
+
+app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
+	var pm = { id : req.params.id };
+	appointment.findById(req.params.id,function(err, foundappointment){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("appointmentdetails", {appointment: foundappointment,pm : pm });
+        }
+    });
+});
+
+app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
+	appointment.findById(req.params.id,function(err, foundappointment){
+        if(err){
+            console.log(err);
+        } else {
+			if(req.body.status=="C")
+			{
+				foundappointment.status="C";
+				foundappointment.time=req.body.time;
+				foundappointment.save();
+				res.redirect("/doctorhome");
+			}
+			if(req.body.status=="R")
+			{
+				foundappointment.status="R";
+				foundappointment.save();
+				user.findById(req.user.id,function(err, founddoctor){
+       				 if(err){
+           				 console.log(err);
+       					 } else {
+						  founddoctor.appointments.pop(foundappointment);
+						  founddoctor.save();
+          				  res.redirect("/doctorhome");
+       					 }
+   					 });
+			}
+			if(req.body.status=="CNF")
+			{
+				foundappointment.status="CNF";
+				foundappointment.description=req.body.description;
+				foundappointment.prescription=req.body.prescription;
+				foundappointment.billamount=req.body.billamount;
+				foundappointment.save();
+				res.redirect("/doctorhome");
+			}
+        }
+    });
+});
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/signin");
+}
+
+function nouser(req, res, next){
+    if(!req.user){
+        return next();
+    }
+    res.redirect("/signin");
+}
+
+function isdoctor(req, res, next){
+    if(req.isAuthenticated()){
+		if(req.user.type=="doctor"){
+        return next();}
+    }
+    res.redirect("/signin");
+}
+
+function nodoctordes(req, res, next){
+    if(req.isAuthenticated()){
+		if(req.user.type=="doctor"&&!req.user.description){
+        return next();}
+    }
+    res.redirect("/signin");
+}
+
+function ispatient(req, res, next){
+    if(req.isAuthenticated()){
+		if(req.user.type=="patient"){
+        return next();}
+    }
+    res.redirect("/signin");
+}
 
 app.listen(3000, function(){
 	console.log("The Clinicapp Server Has Started!");
