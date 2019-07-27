@@ -1,4 +1,9 @@
 <% include partials/header %>
+<% if(!appointments[0])
+{%>
+    <h1>NO APPOINTMENT DATA FOUND</h1>
+<% }
+else { %>
 <fieldset>
         <h3>Appointment Schedule</h3>
         <table class="table table-borderless" >
@@ -8,7 +13,8 @@
             <th>Date</th> 
             <th>Details</th>
             </tr>
-        <% doctor.appointments.forEach(function(appointment){ %>
+        <% appointments.forEach(function(appointment){ 
+            if(appointment.status!="R"){%>
             <tr>
                 <% var month = appointment.appointmentdate.getMonth() +1; %>
                 <td><%= appointment.patientname.toUpperCase() %></td>
@@ -16,7 +22,8 @@
                 <td><%= appointment.appointmentdate.getDate() + "/" + month + "/" + appointment.appointmentdate.getFullYear() %></td> 
                 <td><a href="/doctorhome/<%= appointment._id %>" class="btn btn-primary">View Details</a></td>
             </tr>
-        <% }) %>
+        <% }}) %>
         </table>
     </fieldset>
+<% } %>
 <% include partials/footer %>

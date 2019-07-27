@@ -8,13 +8,14 @@
             <th>Date</th> 
             <th>Details</th>
             </tr>
-        <% patient.appointments.forEach(function(appointment){ %>
+        <% patient.appointments.reverse();
+        patient.appointments.forEach(function(appointment){ %>
             <tr>
                 <% var month = appointment.appointmentdate.getMonth() +1; %>
                 <td><%= appointment.doctorname.toUpperCase() %></td>
                 <td><%= appointment.doctorcn %></td>
                 <td><%= appointment.appointmentdate.getDate() + "/" + month + "/" + appointment.appointmentdate.getFullYear() %></td> 
-                <td><a href="/patienthome/<%= appointment.doctorid._id %>" class="btn btn-primary">View Details</a></td>
+                <td><a href="/patienthome/<%= appointment._id %>" class="btn btn-primary">View Details</a></td>
             </tr>
         <% }) %>
         </table>

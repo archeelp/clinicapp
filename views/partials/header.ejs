@@ -19,11 +19,11 @@
                     <li><a href="/signup">Signup</a></li>
                     <% } else { 
                         if(currentuser.type == "doctor"){ %>
-                            <li><a href="#">Signed In As <%= currentuser.fname %></a></li>
+                            <li><a href="#">Signed In As Dr <%= currentuser.fname %></a></li>
                             <% if(!currentuser.description){ %>
                             <li><a href="/details/<%= currentuser._id %>">Add Details</a></li>
                             <% } %>
-                            <li><a href="/doctorhome">Appointments</a></li>
+                            <li><a href="/aplist">Appointments</a></li>
                         <% } 
                         if(currentuser.type == "patient"){ %>
                             <li><a href="#">Signed In As <%= currentuser.fname %></a></li>

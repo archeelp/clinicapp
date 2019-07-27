@@ -52,6 +52,19 @@
             <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
     </div>
     <% } %>
+    <%
+    var i=0,sum=0;
+    doctor.appointments.forEach(function(appointment){
+        console.log(appointment.status);
+        if(appointment.status=="CNF")
+        {
+            console.log(appointment.billamount);
+            sum+=appointment.billamount;
+            i++;
+        }
+    })
+    var acpu=sum/i;%>
+    <h5>Average Amount Charged Per Appointment : <%=acpu%></h5>
     <h5>REVIEWS</h5>
     <fieldset class="container description">
     <% doctor.reviews.forEach(function(review){ %>

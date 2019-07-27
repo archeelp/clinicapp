@@ -39,20 +39,36 @@ app.get("/",function(req,res){
 		res.render("homepage");
 });
 
-app.get("/signup",function(req,res){
+app.get("/signup",nouser,function(req,res){
 		res.render("signup");
 });
 
-app.get("/signin",function(req,res){
+app.get("/signin",nouser,function(req,res){
 		res.render("signin");
 });
 
-app.get("/doctorhome",isLoggedIn,isdoctor,function(req,res){
+app.get("/aplist",isLoggedIn,isdoctor,function(req,res){
+            res.render("aplist");
+});
+
+app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
         if(err){
             console.log(err);
         } else {
-            res.render("doctorhome", {doctor: founddoctor});
+			var appo =[];
+			founddoctor.appointments.forEach(function(appointment)
+			{
+				var t=new Date();
+				t.setTime(req.params.id);
+				if(t.getDate()==appointment.appointmentdate.getDate()
+				&&t.getMonth()==appointment.appointmentdate.getMonth()
+				&&t.getFullYear()==appointment.appointmentdate.getFullYear())
+				{
+					appo.push(appointment);
+				}
+			});
+            res.render("doctorhome", {appointments: appo});
         }
     });
 });
@@ -175,7 +191,7 @@ app.get("/doctors",function(req,res){
 });
 
 app.get("/doctors/:id", function(req, res){
-	user.findById(req.params.id).populate("reviews").exec(function(err, founddoctor){
+	user.findById(req.params.id).populate("reviews").populate("appointments").exec(function(err, founddoctor){
         if(err){
             console.log(err);
         } else {
@@ -239,7 +255,7 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 				patientname : req.user.fname,
 				doctorname : doctor.fname,
 				patientcn : req.user.contactnumber,
-				doctorcn : doctor.number,
+				doctorcn : doctor.contactnumber,
 				appointmentdate :req.body.appointmentdate,
 				doctorid : doctor._id,
 				patientid : req.user._id
@@ -287,7 +303,7 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 				foundappointment.status="C";
 				foundappointment.time=req.body.time;
 				foundappointment.save();
-				res.redirect("/doctorhome");
+				res.redirect("/aplist");
 			}
 			if(req.body.status=="R")
 			{
@@ -299,7 +315,7 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
        					 } else {
 						  founddoctor.appointments.pop(foundappointment);
 						  founddoctor.save();
-          				  res.redirect("/doctorhome");
+          				  res.redirect("/aplist");
        					 }
    					 });
 			}
@@ -310,8 +326,18 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 				foundappointment.prescription=req.body.prescription;
 				foundappointment.billamount=req.body.billamount;
 				foundappointment.save();
-				res.redirect("/doctorhome");
+				res.redirect("/aplist");
 			}
+        }
+    });
+});
+
+app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
+	appointment.findById(req.params.id,function(err, foundappointment){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("adp", {appointment: foundappointment });
         }
     });
 });
@@ -327,7 +353,7 @@ function nouser(req, res, next){
     if(!req.user){
         return next();
     }
-    res.redirect("/signin");
+    res.redirect("/");
 }
 
 function isdoctor(req, res, next){
