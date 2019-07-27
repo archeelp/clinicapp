@@ -90,6 +90,7 @@
                     <div class="form-group">
                         <p>Patient Name :<%= appointment.patientname%></p>
                         <p>Contact Number :<%= appointment.patientcn%></p>
+                        <%if(appointment.patientid){%><a href="/history/<%= appointment.patientid._id%>" class="btn btn-success">Appointment History</a><%}%>
                     </div>
                     <h1 style="text-align: center">Description</h1>
                     <div class="form-group">

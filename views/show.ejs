@@ -55,10 +55,8 @@
     <%
     var i=0,sum=0;
     doctor.appointments.forEach(function(appointment){
-        console.log(appointment.status);
         if(appointment.status=="CNF")
         {
-            console.log(appointment.billamount);
             sum+=appointment.billamount;
             i++;
         }

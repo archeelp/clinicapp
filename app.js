@@ -57,6 +57,7 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
             console.log(err);
         } else {
 			var appo =[];
+			var addappo=false;
 			founddoctor.appointments.forEach(function(appointment)
 			{
 				var t=new Date();
@@ -68,7 +69,15 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 					appo.push(appointment);
 				}
 			});
-            res.render("doctorhome", {appointments: appo});
+			var t1=new Date();
+			t1.setTime(req.params.id);
+			var t2=new Date();
+			t2.setTime(Date.now());
+			if(t1>=t2){
+				addappo=true;
+			}
+			res.render("doctorhome", {appointments: appo,
+			addappo:addappo,T:t1});
         }
     });
 });
@@ -200,6 +209,16 @@ app.get("/doctors/:id", function(req, res){
     });
 });
 
+app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
+	user.findById(req.params.id).populate("appointments").exec(function(err, foundpatient){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("history", {patient: foundpatient});
+        }
+    });
+});
+
 app.get("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
     // find doctor by id
 		user.findById(req.params.id, function(err, doctor){
@@ -275,6 +294,34 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 	});
  });
  
+ app.post("/addappointment",isLoggedIn,isdoctor, function(req, res){
+	user.findById(req.user.id, function(err, doctor){
+		if(err){
+			console.log(err);
+			res.redirect("/");
+		} else {
+		 appointment.create(
+			 {
+				patientname : req.body.patientname,
+				doctorname : doctor.fname,
+				patientcn : req.body.patientcn,
+				doctorcn : doctor.contactnumber,
+				appointmentdate :req.body.appointmentdate,
+				doctorid : doctor._id
+				}, function(err, appointment){
+			if(err){
+				console.log(err);
+			} else {
+				appointment.save();
+				doctor.appointments.push(appointment);
+				doctor.save();
+				res.redirect("/aplist");
+			}
+		 });
+		}
+	});
+ });
+
  app.post("/signin",nouser, passport.authenticate("user", 
     {
         successRedirect: "/",

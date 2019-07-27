@@ -22,8 +22,16 @@ else { %>
                 <td><%= appointment.appointmentdate.getDate() + "/" + month + "/" + appointment.appointmentdate.getFullYear() %></td> 
                 <td><a href="/doctorhome/<%= appointment._id %>" class="btn btn-primary">View Details</a></td>
             </tr>
-        <% }}) %>
-        </table>
+        <% }}) 
+        if(addappo){%>
+        <form id="signup" method="POST" action="/addappointment" >
+        <% var month = T.getMonth() +1; %>
+        <td><input name="patientname" type="text" class="form-control" placeholder="Patient Name" required></td>
+        <td><input name="patientcn" type="text" class="form-control" placeholder="Contact Number" required></td>
+        <td><%= T.getDate() + "/" + month + "/" + T.getFullYear() %></td> 
+        <td><button name="appointmentdate" value="<%= T %>" id="register">ADD APPOINTMENT</button></td>
+        </form>
+    </table>
     </fieldset>
-<% } %>
+<% }} %>
 <% include partials/footer %>

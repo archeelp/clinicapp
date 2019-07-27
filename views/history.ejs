@@ -1,0 +1,21 @@
+<% include partials/header %>
+ <div class="container">
+      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% patient.appointments.forEach(function(appointment){
+            var a=appointment.doctorid;
+            var b=currentuser._id;
+            if(a.toString()==b.toString()) {
+                if(appointment.status == "CNF"){
+                var d = appointment.appointmentdate;
+                var month=d.getMonth()+1;%>
+                    <p>Appointment Date :<%= d.getDate() + "/" + month + "/" + d.getFullYear()%></p>
+                <br>
+                    <p>Appointment Description : <%= appointment.description%></p>
+                <br>
+                    <p>Appointment Prescription : <%= appointment.prescription%></p>
+                    <a href="/doctorhome/<%= appointment._id%>" class="btn btn-success">Appointment Details</a>
+        <% }}}); %>
+    </div>
+</div>
+
+<% include partials/footer %>
