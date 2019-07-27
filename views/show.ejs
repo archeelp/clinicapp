@@ -47,6 +47,7 @@
         <% }) %>
         </table>
     </fieldset>
+<<<<<<< HEAD
     <% if((!currentuser)||(currentuser.type=="patient")) {%>
     <div>
             <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
@@ -65,13 +66,20 @@
     <h5>Average Amount Charged Per Appointment : <%=acpu%></h5>
     <h5>REVIEWS</h5>
     <fieldset class="container description">
+=======
+
+>>>>>>> 29554be897ec8b87a810f2a814cd9722607649a7
     <% doctor.reviews.forEach(function(review){ %>
         <p>
             <strong><%= review.author.username %></strong> - <%= review.text %>
         </p>
     <% }) %>
+<<<<<<< HEAD
     </fieldset>
     <% if((!currentuser)||(currentuser.type=="patient")) {%>
+=======
+
+>>>>>>> 29554be897ec8b87a810f2a814cd9722607649a7
     <p>
         <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
     </p>
