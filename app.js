@@ -51,6 +51,45 @@ app.get("/aplist",isLoggedIn,isdoctor,function(req,res){
             res.render("aplist");
 });
 
+app.get("/stats",isLoggedIn,isdoctor,function(req,res){
+	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
+        if(err){
+            console.log(err);
+        } else {
+			var appo=[];
+			var days =["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+			var d = new Date();
+			var c = new Date();
+			var sub=30-Number(d.getDate());
+			d.setTime(c.getTime()+sub*24*60*60*1000);
+			for(i=-1;d.getMonth()==c.getMonth();i--)
+			{
+				req.user.schedule.forEach(function(schedule){ 
+				if(schedule.day == days[d.getDay()])
+				{
+					var j=0;
+					founddoctor.appointments.reverse();
+					founddoctor.appointments.forEach(function(appointment)
+					{
+						if(d.getDate()==appointment.appointmentdate.getDate()
+						&&d.getMonth()==appointment.appointmentdate.getMonth()
+						&&d.getFullYear()==appointment.appointmentdate.getFullYear())
+						{
+							j++;
+						}
+					});
+					var month=d.getMonth()+1;
+					var t=d.getDate()+"/"+month+"/"+d.getFullYear();
+					appo.push({label:t,y:j});
+				}
+				});
+				d.setTime(c.getTime()+sub*24*60*60*1000+i*24*60*60*1000);
+			}
+			res.render("stats",{appointmentdata:appo});
+		}
+});
+});
+
 app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
         if(err){

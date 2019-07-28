@@ -9,7 +9,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">CLINIC APP</a>
+                <a class="navbar-brand" href="/">CLINIC APP</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -24,6 +24,7 @@
                             <li><a href="/details/<%= currentuser._id %>">Add Details</a></li>
                             <% } %>
                             <li><a href="/aplist">Appointments</a></li>
+                            <li><a href="/stats">Stats</a></li>
                         <% } 
                         if(currentuser.type == "patient"){ %>
                             <li><a href="#">Signed In As <%= currentuser.fname %></a></li>

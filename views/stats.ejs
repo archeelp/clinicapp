@@ -1,0 +1,28 @@
+<% include partials/header %>
+<style>
+	.clu{
+		position: absolute;
+		left:50%;
+		transform: translate(-50%,10%);
+	}
+</style>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+		title:{
+			text: "Daily Analysis Of Number Of Patients"              
+		},
+		data: [              
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "spline",
+			dataPoints:<%-JSON.stringify(appointmentdata.reverse());%>
+		}
+		]
+	});
+	chart.render();
+}
+</script>
+<div id="chartContainer" class="clu" allign="center" style="height: 300px; width: 50%;"></div>
+<% include partials/footer %>
