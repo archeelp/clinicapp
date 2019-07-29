@@ -29,6 +29,33 @@ passport.use("user",new LocalStrategy(user.authenticate()));
 passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
 
+//PASSPORT CONFIGURATION COMPLETE
+
+//MULTER AND CLOUDINARY CONFIGURATION
+
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter})
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'dp71ux6po', 
+  api_key: '373788194924911', 
+  api_secret: '5Lvzuy5445yWBYP0HlyyF8b3EPI'
+});
+
+//MULTER AND CLOUDINARY CONFIGURATION COMPLETE
 
 app.use(function(req, res, next){
 res.locals.currentuser = req.user;
@@ -161,11 +188,26 @@ app.get("/details/:id",isLoggedIn,isdoctor,nodoctordes,function(req,res){
 	res.render("docdes",{pm:pm});
 });
 
-app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes ,function(req, res){
-    user.findById(req.params.id, function(err, founddoctor){
+app.post("/doctors/:id/deletereview",isLoggedIn,ispatient,function(req,res){
+	review.findByIdAndRemove(req.params.id,function(err){
+		if(err){
+			console.log(err);
+			res.redirect("/");
+		}
+		else{
+			res.redirect("/doctors");
+		}
+	})
+});
+
+app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'), function(req, res) {
+    cloudinary.uploader.upload(req.file.path, function(result) {
+      user.findById(req.params.id, function(err, founddoctor){
         if(err){
             console.log("you have an error");
         } else {
+			founddoctor.image = result.secure_url;
+			founddoctor.image_id = result.public_id;
 			founddoctor.description=req.body.description;
 			if(req.body.id0 == "on")
 				{
@@ -224,7 +266,8 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes ,function(req, res){
                 }
 			founddoctor.save();
 			res.redirect("/aplist");
-        }
+		}
+	});
     });
 });
 

@@ -75,10 +75,12 @@
     <fieldset class="container">
     <% doctor.reviews.forEach(function(review){ %>
         <p style="font-size: 125%;">
-            <form id="delete" action="">
             <strong><%= review.author.username %></strong> - <%= review.text %> 
-            if(currentuser){if(currentuser){<input type="button" value="Delete" class="btn btn-danger">}}
-        </form>
+            <% if(currentuser && review.author.id.equals(currentuser._id)){ %>
+                <form id="delete-form" action="/doctors/<%=review._id %>/deletereview" method="POST">
+                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                </form>
+            <% } %>
         </p>
     <% }) %>
     </fieldset>
@@ -88,5 +90,6 @@
     </p>
     </div>
     <% }%>
+    <img class="img-responsive" src="<%= doctor.image %>">
 </div>
 <% include partials/footer %>

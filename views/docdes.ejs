@@ -44,7 +44,7 @@
     <div class="row">
         <h1 style="text-align: center">Add a brief description</h1>
         <div style="width: 70%; margin: 25px auto;">
-            <form id="form" action="/details/<%= pm.id %>" method="POST">
+            <form id="form" action="/details/<%= pm.id %>" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <textarea id="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
                 </div>
@@ -88,7 +88,10 @@
                                 <td class="notVisible time pding"><label>From</label> <input name="id6from" type="number"> <label>To</label> <input name="id6to" type="number"></td>
                             </tr>    
                         </table>
-                        <input type="file" name="pic" accept="image/*">
+                        <div class="form-group">
+                            <label for="image">Profile Photo</label>
+                            <input type="file" id="image" name="image" accept="image/*" required>
+                        </div>
                         
                     </div>
                 </fieldset>
