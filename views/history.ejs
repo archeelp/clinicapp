@@ -1,6 +1,18 @@
 <% include partials/header %>
- <div class="container">
-      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+<style>
+    .appointment {
+        border: 1px solid black;
+        margin-bottom: 1%;
+        text-align: center;
+        padding-bottom: 0.5%;
+        padding-top: 0.5%;
+        padding-left: 0.5%;
+    }
+    .size {
+        font-size: 150%;
+    }
+</style>
+        
         <% patient.appointments.forEach(function(appointment){
             var a=appointment.doctorid;
             var b=currentuser._id;
@@ -8,14 +20,17 @@
                 if(appointment.status == "CNF"){
                 var d = appointment.appointmentdate;
                 var month=d.getMonth()+1;%>
-                    <p>Appointment Date :<%= d.getDate() + "/" + month + "/" + d.getFullYear()%></p>
+                <div class="container">
+                <div class="appointment">
+                    <p style="text-align: left; font-size: 100%;">Appointment Date :<%= d.getDate() + "/" + month + "/" + d.getFullYear()%></p>
                 <br>
-                    <p>Appointment Description : <%= appointment.description%></p>
+                    <p class = "size">Appointment Description : <%= appointment.description%></p>
                 <br>
-                    <p>Appointment Prescription : <%= appointment.prescription%></p>
+                    <p class = "size">Appointment Prescription : <%= appointment.prescription%></p>
                     <a href="/doctorhome/<%= appointment._id%>" class="btn btn-success">Appointment Details</a>
-        <% }}}); %>
-    </div>
-</div>
+                    </div>
+                    </div>
+                    <% }}}); %>
+   
 
 <% include partials/footer %>

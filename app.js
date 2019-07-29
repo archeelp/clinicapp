@@ -223,7 +223,7 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes ,function(req, res){
 				});
                 }
 			founddoctor.save();
-			res.redirect("/doctorhome");
+			res.redirect("/aplist");
         }
     });
 });

@@ -4,6 +4,7 @@
         <title>CLIINIC APP</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Courgette&display=swap" rel="stylesheet">
+        <link rel="icon" href="https://previews.123rf.com/images/jroblesart/jroblesart1501/jroblesart150100031/35459605-medical-symbol-caduceus-with-snakes-and-wings.jpg" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css?family=DM+Serif+Text&display=swap" rel="stylesheet">
     </head>
     <style>
@@ -26,7 +27,7 @@
                     <li><a href="/doctors">View Doctors</a></li>
                     <% if(!currentuser){ %>
                     <li><a href="/signin">Login</a></li>
-                    <li><a href="/signup">Signup</a></li>
+                    <li><a href="/signup">Sign-up</a></li>
                     <% } else { 
                         if(currentuser.type == "doctor"){ %>
                             <li><a href="#">Signed In As Dr <%= currentuser.fname %></a></li>
