@@ -11,7 +11,9 @@ var express = require("express"),
 	appointment = require("./models/appointment"),
 	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 
-mongoose.connect("mongodb://localhost/clinicapp", { useNewUrlParser: true });
+var databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
+
+mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
@@ -509,6 +511,6 @@ function ispatient(req, res, next){
     res.redirect("/signin");
 }
 
-app.listen(3000, function(){
+app.listen(process.env.PORT||3000, function(){
 	console.log("The Clinicapp Server Has Started!");
  });
