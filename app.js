@@ -124,7 +124,8 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
         if(err){
             console.log(err);
         } else {
-			var appo =[];
+			var appo1 =[];
+			var appo2=[];
 			var addappo=false;
 			founddoctor.appointments.forEach(function(appointment)
 			{
@@ -134,9 +135,19 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 				&&t.getMonth()==appointment.appointmentdate.getMonth()
 				&&t.getFullYear()==appointment.appointmentdate.getFullYear())
 				{
-					appo.push(appointment);
+					if(appointment.time){
+						appo1.push(appointment);
+					}
+					else {
+						appo2.push(appointment);
+					}
 				}
 			});
+			appo1.sort(function(a,b){
+				var temp1=60*Number(a.time[0]+a.time[1])+Number(a.time[3]+a.time[4]);
+				var temp2=60*Number(b.time[0]+b.time[1])+Number(b.time[3]+b.time[4]);
+				return temp1-temp2;
+			})
 			var t1=new Date();
 			t1.setTime(req.params.id);
 			var t2=new Date();
@@ -144,7 +155,8 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 			if(t1>=t2){
 				addappo=true;
 			}
-			res.render("doctorhome", {appointments: appo,
+			res.render("doctorhome", {appointments: appo1,
+			oappointments:appo2,
 			addappo:addappo,T:t1});
         }
     });
