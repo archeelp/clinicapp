@@ -32,7 +32,9 @@
 </style>
 <div class = container>
     <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
+    
     <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
+    <img class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
     <div class="description">
         <h3><b>ABOUT DOCTOR <%= doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></b></h3>
         <p id="description"><%= doctor.description %></p>
@@ -90,6 +92,5 @@
     </p>
     </div>
     <% }%>
-    <img class="img-responsive" src="<%= doctor.image %>">
 </div>
 <% include partials/footer %>
