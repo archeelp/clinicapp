@@ -24,6 +24,7 @@
         color: white;
         border-radius: .5em;
 		font-size: 125%;
+		margin-bottom: 2%;
 	}
 	#type {
 		margin-top: 15px;
@@ -76,7 +77,7 @@
 					<div class="form-group">
 							<div class="form-wrapper">
 									<label for="">User Name</label>
-									<input name="username" type="text" class="form-control" placeholder="First Name" required>
+									<input name="username" type="text" class="form-control" placeholder="Username	" required>
 							</div>
 						<div class="form-wrapper">
 							<label for="">First Name</label>
@@ -109,13 +110,14 @@
 					</div>
 					<div id="match"></div>
 					<div class="radio">
+		
 						<div>
 								<label class="btn btn-secondary option">
-									<input name="type" value="doctor" type="radio" class="form-control" required>Doctor
+									<input name="type" value="doctor" type="radio"  required>Doctor
 									</label>
 						</div>
 								<label class="btn btn-secondary option">
-										<input name="type" value="patient" type="radio" class="form-control" required>Patient
+										<input name="type" value="patient" type="radio" required>Patient
 								</label>
 					</div>
 					<div class="checkbox">
@@ -129,17 +131,7 @@
 			</div>
 		</div>
 		<script>
-			document.querySelector(".select-css").addEventListener("change", function() {
-				if(document.querySelector(".select-css").value == "Patient") {
-					document.querySelector("#auth").style.display= "none";
-					document.querySelector("#a").removeAttribute("required pattern");
-				}
-				else {
-					document.querySelector("#auth").style.display= "inline";
-					document.querySelector("#a").setAttribute("required pattern", "(?=.*\\d)(?=.*[A-Z]).{8}");
-				}
-});
-		var pw1 = document.querySelector("#pw1"),
+			document.querySelector("#pw1"),
 				pw2 = document.querySelector("#pw2");
 				match = document.querySelector("#match");
 				show = false;

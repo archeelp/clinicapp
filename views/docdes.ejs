@@ -25,28 +25,33 @@
     .notVisible {
         display: none;
     }
-    #textarea {
+    .textarea {
         width: 100%;
         height: 125px;
         font-size: 2.0rem;
         text-align: center;
         padding: 45px;
     }
-    #textarea:focus {
+    .textarea:focus {
         width: 100%;
         height: 125px;
         font-size: 2.0rem;
         padding: 5px;
         text-align: left;
     }
+    #lbl {
+        margin-top: 1%;
+        font-size: 150%;
+    }
 </style>
 <div class="container">
     <div class="row">
-        <h1 style="text-align: center">Add a brief description</h1>
+        <h1 style="text-align: center"><u>Doctor Details</u></h1>
         <div style="width: 70%; margin: 25px auto;">
+                <legend>Add a brief description</legend>
             <form id="form" action="/details/<%= pm.id %>" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <textarea id="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
+                    <textarea class="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
                 </div>
                 <fieldset>
                     <legend>Choose your timings</legend>
@@ -89,8 +94,12 @@
                             </tr>    
                         </table>
                         <div class="form-group">
-                            <label for="image">Profile Photo</label>
-                            <input type="file" id="image" name="image" accept="image/*" required>
+                            <legend style="margin-top: 1%;">Address</legend>
+                            <textarea class="textarea" form="form" name="address" placeholder="Address" id=""></textarea>
+                        </div>
+                        <div class="form-group">
+                            <legend id="lbl" for="image">Profile Photo</legend>
+                            <input type="file" cl id="image" name="image" accept="image/*" required>
                         </div>
                         
                     </div>
