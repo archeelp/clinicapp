@@ -154,7 +154,10 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 			t1.setTime(req.params.id);
 			var t2=new Date();
 			t2.setTime(Date.now());
-			if(t1>=t2){
+			if(t1.getDate()>=t2.getDate()){
+				addappo=true;
+			}
+			else if(t1.getMonth()>t2.getMonth()){
 				addappo=true;
 			}
 			res.render("doctorhome", {appointments: appo1,

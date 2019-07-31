@@ -1,5 +1,5 @@
 <% include partials/header %>
-<% if(!appointments[0])
+<% if(!appointments[0]&&!oappointments[0])
 {%>
     <h1>NO APPOINTMENT DATA FOUND</h1>
 <% }
@@ -42,16 +42,21 @@ else { %>
                 <%}%>
                 <td><a href="/doctorhome/<%= appointment._id %>" class="btn btn-primary">View Details</a></td>
             </tr>
-        <% }}) 
-        if(addappo){%>
-        <form id="signup" method="POST" action="/addappointment" >
-        <% var month = T.getMonth() +1; %>
-        <td><input name="patientname" type="text" class="form-control" placeholder="Patient Name" required></td>
-        <td><input name="patientcn" type="text" class="form-control" placeholder="Contact Number" required></td>
-        <td><%= T.getDate() + "/" + month + "/" + T.getFullYear() %></td> 
-        <td><button class="btn btn-success" name="appointmentdate" value="<%= T %>" id="register">ADD APPOINTMENT</button></td>
-        </form>
+        <% }}) %>
     </table>
     </fieldset>
-<% }} %>
+<% } %>
+<%if(addappo){%>
+    <form id="signup" method="POST" action="/addappointment" >
+    <% var month = T.getMonth() +1; %>
+    <table class="table table-borderless" >
+    <tr>
+    <td><input name="patientname" type="text" class="form-control" placeholder="Patient Name" required></td>
+    <td><input name="patientcn" type="text" class="form-control" placeholder="Contact Number" required></td>
+    <td><%= T.getDate() + "/" + month + "/" + T.getFullYear() %></td> 
+    <td><button class="btn btn-success" name="appointmentdate" value="<%= T %>" id="register">ADD APPOINTMENT</button></td>
+    </form>
+    <tr>
+    </table>
+<%}%>
 <% include partials/footer %>
