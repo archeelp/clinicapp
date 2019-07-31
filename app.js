@@ -80,7 +80,7 @@ var imgurl =[
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRonlKSi2v_FRMsiqTacpliFialJ-cKYDPaDsn2Fe4nihLCD6A60w",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlhnl6GNOZMtYiBZjBN8MhZsem7lY--ixyfIsZvsP2spik2X-U6Q"
 ];
-for(i=0;i<12;i++){
+for(i=0;i<16;i++){
 	var suser = {
 		username: faker.internet.userName(),
 		type: "doctor",
@@ -97,7 +97,19 @@ for(i=0;i<12;i++){
 			console.log(err);
 			return res.render("signup");
 		}
-		else console.log("user registtered");
+		else{
+				newlyCreated.schedule.push({
+				day :"monday",
+				from :"10",
+				to :"12"
+				});
+				newlyCreated.schedule.push({
+					day :"tuesday",
+					from :"11",
+					to :"13"
+				});
+				newlyCreated.save();
+		}
     });
 }
 //COMPLETE
