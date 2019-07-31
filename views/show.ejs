@@ -25,18 +25,40 @@
     .review {
         border: 1px solid rgba(0,0,0,0.2);
         padding-left: 1%;
+        padding-right: 1%;
     }
     #delete {
         display: inline;
     }
+    .address {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 1%;
+        width: 25%;
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-top: 1%;
+    }
+    .img {
+        height: 180px;
+        width: 180p  x;
+    }
+    .x {
+        text-align: center;
+    } 
 </style>
 <div class = container>
+    <div class="x">    
+    <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
+    </div>
     <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
     
     <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
-    <img class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
+    <div class="address">
+    <legend style="font-size: 125%;">Address</legend>
+    <p style="font-size: 125%;"><%= doctor.address %></p>
+</div>
     <div class="description">
-        <h3><b>ABOUT DOCTOR <%= doctor.fname.toUpperCase() + " " +doctor.lname.toUpperCase() %></b></h3>
+        <h3>About Dr <%= doctor.fname + " " +doctor.lname %></h3>
         <p id="description"><%= doctor.description %></p>
     </div>
     <fieldset>
@@ -73,8 +95,7 @@
     var acpu=Math.round(sum/i);%>
     <h4><strong>Average Consulting Charges:</strong> <%=acpu%></h4>
     <div class="review">
-    <h2>REVIEWS</h2>
-    <fieldset class="container">
+    <h3>REVIEWS</h3>
     <% doctor.reviews.forEach(function(review){ %>
         <p style="font-size: 125%;">
             <strong><%= review.author.username %></strong> - <%= review.text %> 
@@ -85,7 +106,6 @@
             <% } %>
         </p>
     <% }) %>
-    </fieldset>
     <% if((!currentuser)||(currentuser.type=="patient")) {%>
     <p>
         <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>

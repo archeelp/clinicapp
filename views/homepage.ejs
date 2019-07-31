@@ -22,12 +22,12 @@
      <header class="jumbotron">
          <%if(!currentuser){%>
             <div class="container">
-                    <h1>Welcome To <span>ClinicApp</span><sup>TM</sup> </h1>
+                    <h1>Welcome To <span>ClinicApp</span></h1>
                  </div>
          <%}
         else{%>
             <div class="container">
-                    <h1>Welcome To <span>ClinicApp</span><sup>TM</sup><%= currentuser.fname.toUpperCase()%> </h1>
+                    <h1>Welcome To <span>ClinicApp</span><%= currentuser.fname.toUpperCase()%> </h1>
                </div>
         <%}%>
         </header>

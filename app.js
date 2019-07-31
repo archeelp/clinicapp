@@ -3,6 +3,7 @@ var express = require("express"),
 	bodyParser = require("body-parser"),
 	session = require("express-session"),
 	mongoose = require("mongoose"),
+	expressSanitizer = require("express-sanitizer"),
 	passport = require("passport"),
 	LocalStrategy = require("passport-local"),
 	passportLocalMongoose = require("passport-local-mongoose"),
@@ -17,6 +18,7 @@ mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
+app.use(expressSanitizer());
 
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
@@ -179,12 +181,12 @@ app.get("/logout",isLoggedIn,function(req,res){
 
 app.post("/signup",function(req,res){
 	var suser = {
-		username: req.body.username,
+		username: req.sanitize(req.body.username),
 		type: req.body.type,
-		fname: req.body.fname,
-		lname: req.body.lname,
-		email: req.body.email,
-		contactnumber: req.body.contactnumber
+		fname: req.sanitize(req.body.fname),
+		lname: req.sanitize(req.body.lname),
+		email: req.sanitize(req.body.email),
+		contactnumber: req.sanitize(req.body.contactnumber)
 	};
     user.register(suser, req.body.password ,function(err, newlyCreated){
         if(err){
@@ -222,7 +224,8 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
         } else {
 			founddoctor.image = result.secure_url;
 			founddoctor.image_id = result.public_id;
-			founddoctor.description=req.body.description;
+			founddoctor.description=req.sanitize(req.body.description);
+			founddoctor.address = req.sanitize(req.body.address);
 			if(req.body.id0 == "on")
 				{
 					founddoctor.schedule.push({
@@ -336,9 +339,9 @@ app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 			if(err){
 				console.log(err);
 			} else {
-				review.author.id = req.user._id;
-			   review.author.username = req.user.username;
-			   review.text=req.body.text;
+				review.author.id = req.sanitize(req.user._id);
+				review.text=req.sanitize(req.body.text);
+				review.author.username = req.user.username;
                review.save();
 				doctor.reviews.push(review);
 				doctor.save();
@@ -398,9 +401,9 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 		} else {
 		 appointment.create(
 			 {
-				patientname : req.body.patientname,
+				patientname : req.sanitize(req.body.patientname),
 				doctorname : doctor.fname,
-				patientcn : req.body.patientcn,
+				patientcn : req.sanitize(req.body.patientcn),
 				doctorcn : doctor.contactnumber,
 				appointmentdate :req.body.appointmentdate,
 				doctorid : doctor._id
@@ -444,7 +447,7 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 			if(req.body.status=="C")
 			{
 				foundappointment.status="C";
-				foundappointment.time=req.body.time;
+				foundappointment.time=req.sanitize(req.body.time);
 				foundappointment.save();
 				res.redirect("/aplist");
 			}
@@ -465,9 +468,9 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 			if(req.body.status=="CNF")
 			{
 				foundappointment.status="CNF";
-				foundappointment.description=req.body.description;
-				foundappointment.prescription=req.body.prescription;
-				foundappointment.billamount=req.body.billamount;
+				foundappointment.description=req.sanitize(req.body.description);
+				foundappointment.prescription=req.sanitize(req.body.prescription);
+				foundappointment.billamount=req.sanitize(req.body.billamount);
 				foundappointment.save();
 				res.redirect("/aplist");
 			}

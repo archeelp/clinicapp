@@ -15,6 +15,7 @@ var userSchema = new mongoose.Schema({
     contactnumber: String,
 	authenticationKey: String,
     description: String,
+    address: String,
     schedule : [
         {
             day : String,
