@@ -62,7 +62,7 @@ cloudinary.config({
 //MULTER AND CLOUDINARY CONFIGURATION COMPLETE
 
 //FAKER
-var imgurl =[
+/*var imgurl =[
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVV2C9Wd4dmYbsUCn_H5I4BMn9UYZsKmwvQcKVcaKMCMuXJB58",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz3WNCwhrhQPga14FTBfxLHWNRTgdHq8ahRNt5JT-1XtuYPtNp",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyNRmjP2FnYIhyfAY3Uk_SpTVPaPWhSfRb_f3z598ER0dxIFuw",
@@ -111,7 +111,7 @@ for(i=0;i<16;i++){
 				newlyCreated.save();
 		}
     });
-}
+}*/
 //COMPLETE
 
 app.use(function(req, res, next){
