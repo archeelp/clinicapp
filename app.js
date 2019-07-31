@@ -10,9 +10,9 @@ var express = require("express"),
 	user = require("./models/user"),
 	review = require("./models/review"),
 	appointment = require("./models/appointment"),
-	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-
-var databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
+	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
+	faker = require("faker"),
+    databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
@@ -60,6 +60,47 @@ cloudinary.config({
 });
 
 //MULTER AND CLOUDINARY CONFIGURATION COMPLETE
+
+//FAKER
+var imgurl =[
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVV2C9Wd4dmYbsUCn_H5I4BMn9UYZsKmwvQcKVcaKMCMuXJB58",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz3WNCwhrhQPga14FTBfxLHWNRTgdHq8ahRNt5JT-1XtuYPtNp",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyNRmjP2FnYIhyfAY3Uk_SpTVPaPWhSfRb_f3z598ER0dxIFuw",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpZALWesbqageji2LOzFXRMPJ1LHGGf9_LzIsy3FlXW4-ZgW4B",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmJarQHXhA2Ia_wFdP7BcAigP6XYOodfJW2HIrWMKcZs90Do9MXA",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW_0LaX5oFL0sTR_lD7dkGkYfiQbgjM3wf64VMbz3N7TjZDUPS",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpzEMKsQO9Dp0p6ucQaGs24-8GNGfELL9V1lLKeJ8pTmGV3KcB",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpxkNYJ6KtsKx6WjV9qvAk4coqMzyy16HEL2JRQGeAxROXEIBv_A",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcdIp72bafvZvjZ8Ox23FVTLiknOUQYQtjcKKM-K4AUpYArT6d",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa_RWfFQvBdKuh09_xc1FIiINdbaevnMgECXuPTliIOXKcdLc3lw",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4MhB5szikoYS2O4wrSxf7Uv1ozK3g7Jvv9hMpVd1DWAjfO1rV",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyysKeS9tA8M9aMGM16Z2JoLGJw1FEcFazeBkvbb5hVjUXHszK",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG7nfyANOL6bnpWAM7t8Wa_qexZAv0Qbh4ZtytvimzeOCBEJCWBg",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFbW8Nchl9FZYzoViR6HfrX0CKxlOt25pcZXRMvQWHDnbF7vrl",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRonlKSi2v_FRMsiqTacpliFialJ-cKYDPaDsn2Fe4nihLCD6A60w",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlhnl6GNOZMtYiBZjBN8MhZsem7lY--ixyfIsZvsP2spik2X-U6Q"
+];
+for(i=0;i<12;i++){
+	var suser = {
+		username: faker.internet.userName(),
+		type: "doctor",
+		fname: faker.name.firstName(),
+		lname: faker.name.lastName(),
+		email: faker.internet.email(),
+		contactnumber: faker.phone.phoneNumber(),
+		image: imgurl[i],
+		address: faker.address.streetAddress(),
+		description: faker.lorem.paragraph()
+	};
+    user.register(suser, "Arch1234" ,function(err, newlyCreated){
+        if(err){
+			console.log(err);
+			return res.render("signup");
+		}
+		else console.log("user registtered");
+    });
+}
+//COMPLETE
 
 app.use(function(req, res, next){
 res.locals.currentuser = req.user;
