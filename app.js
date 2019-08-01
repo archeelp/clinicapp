@@ -218,9 +218,11 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 			else if(t1.getMonth()>t2.getMonth()){
 				addappo=true;
 			}
-			res.render("doctorhome", {appointments: appo1,
-			oappointments:appo2,
-			addappo:addappo,T:t1});
+			res.render("doctorhome", {
+				appointments: appo1,
+				oappointments:appo2,
+				addappo:addappo,T:t1
+			});
         }
     });
 });

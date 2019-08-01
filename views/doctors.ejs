@@ -1,16 +1,22 @@
 <% include partials/header %>
-<p>
-    <form action="/doctors" method="GET" class="form-inline">
-        <div class="form-group">
-            <input type="text" name="search" placeholder="Doctor search..." class="form-control">
-            <input type="submit" value="Search" class="btn btn-search">
-        </div>
-    </form>
-</p>
-<%if(noMatch){%>
-<h1>NO MATCH FOUND</h1>
-<%}else{%>
+<style>
+    .search {
+        margin-bottom: 1%;
+        text-align: center;
+    }
+</style>
  <div class="container">
+        <div class="search">
+                <form action="/doctors" method="GET" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" name="search" placeholder="Doctor's Name" class="form-control">
+                        <input type="submit" value="Search" class="btn btn-search">
+                    </div>
+                </form>
+            </div>
+            <%if(noMatch){%>
+            <h1 style="text-align: center;">No Match Found :(</h1>
+            <%}else{%>
       <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% doctors.forEach(function(doctor){
             if(doctor.type == "doctor"&&doctor.address) {%>
@@ -19,6 +25,13 @@
                    <div class="caption">
                        <h4><%= doctor.fname %></h4>
                    </div>
+                   <p>
+                       <% if(String(doctor.description).length > 20) {%>
+                        <%= String(doctor.description).slice(0,20) + "..." %>
+                        <%} else{%>
+                        <%= String(doctor.description)%>
+                        <%}%>
+                    </p> 
                    <p>
                        <a href="/doctors/<%= doctor.id %>" class="btn btn-primary">More Info</a>
                    </p>
