@@ -1,143 +1,217 @@
-<% include partials/header %>
-<link href="https://fonts.googleapis.com/css?family=Noto+Serif+TC&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<style>
-    h1 {
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!--
+    ArcGIS API for JavaScript, https://js.arcgis.com
+    For more information about the intro-mapview sample, read the original sample description at developers.arcgis.com.
+    https://developers.arcgis.com/javascript/latest/intro-mapview/index.html
+    -->
+    <title>CLIINIC APP</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Courgette&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://previews.123rf.com/images/jroblesart/jroblesart1501/jroblesart150100031/35459605-medical-symbol-caduceus-with-snakes-and-wings.jpg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=DM+Serif+Text&display=swap" rel="stylesheet">
+    <style>
+         h1 {
         font-family: 'Open Sans', sans-serif;
-    }
-    #description {
-        font-size: 125%;
-        font-weight: 500;
-    }
-    .description {
-        border: 1px solid rgba(0,0,0,0.2);
-        padding-left: 5px;
-    }
-    th {
-        font-size: 125%;
-        text-align: left;
-    }
-    #button {
-        font-weight: bold;
-        padding: auto;
-        font-size: 110%;
-    }
-    .review {
-        border: 1px solid rgba(0,0,0,0.2);
-        padding-left: 1%;
-        padding-right: 1%;
-    }
-    #delete {
-        display: inline;
-    }
-    .address {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        margin-bottom: 1%;
-        width: 25%;
-        padding-left: 1%;
-        padding-right: 1%;
-        padding-top: 1%;
-    }
-    .img {
-        display: inline;
-        margin: 0 auto;
-        /*margin-left: -15%;
-        margin-top: -15%; */
-        height: 100%;
-        width: auto;
-    }
-    .x {
-        width: 200px;
-        height: 200px;
-        position: relative;
-        left: 45%;
-        justify-content: center;
-    
-        overflow: hidden;
-        border-radius: 50%;
-    } 
-
-    /*.delbutton {
-        position:relative;
-        left: 50%;
-        justify-content: center;
-    }
-    .changePic {
-        background-color: crimson;
-        color: white;
-        border-radius: 6px;
-        padding: 10px 24px;
-        text-align: center;
-        display: inline-block;
-        font-size: 12px;
-    }*/
-</style>
-<div class = container>
-    <div class="x">    
-    <img class="img" class="img-responsive" src="<%= doctor.image %>">
-    </div><br>
-    <!--<div class="delbutton">
-    <button type="button" class="changePic">Change</button></div>-->
-    <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
-    
-    <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
-    <div class="address">
-    <legend style="font-size: 125%;">Address</legend>
-    <p style="font-size: 125%;"><%= doctor.address %></p>
-</div>
-    <div class="description">
-        <h3>About Dr <%= doctor.fname + " " +doctor.lname %></h3>
-        <p id="description"><%= doctor.description %></p>
-    </div>
-    <fieldset>
-        <h3>Available Timings</h3>
-        <table class="table table-borderless" >
-            <tr>
-            <th>Day</th>
-            <th>From</th> 
-            <th>To</th>
-            </tr>
-        <% doctor.schedule.forEach(function(schedule){ %>
-            <tr>
-                <td><%= schedule.day.toUpperCase() %></td>
-                <td><%= schedule.from + ":00" %></td> 
-                <td><%= schedule.to + ":00" %></td>
-            </tr>
-        <% }) %>
-        </table>
-    </fieldset>
-    <% if((!currentuser)||(currentuser.type=="patient")) {%>
-    <div>
-            <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
-    </div>
-    <% } %>
-    <%
-    var i=0,sum=0;
-    doctor.appointments.forEach(function(appointment){
-        if(appointment.status=="CNF")
-        {
-            sum+=Number(appointment.billamount);
-            i++;
         }
-    })
-    var acpu=Math.round(sum/i);%>
-    <h4><strong>Average Consulting Charges:</strong> <%=acpu%></h4>
-    <div class="review">
-    <h3>REVIEWS</h3>
-    <% doctor.reviews.forEach(function(review){ %>
-        <p style="font-size: 125%;">
-            <strong><%= review.author.username %></strong> - <%= review.text %> 
-            <% if(currentuser && review.author.id.equals(currentuser._id)){ %>
-                <form id="delete-form" action="/doctors/<%=review._id %>/deletereview" method="POST">
-                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                </form>
+        #description {
+            font-size: 125%;
+            font-weight: 500;
+        }
+        .description {
+            border: 1px solid rgba(0,0,0,0.2);
+            padding-left: 5px;
+        }
+        th {
+            font-size: 125%;
+            text-align: left;
+        }
+        #button {
+            font-weight: bold;
+            padding: auto;
+            font-size: 110%;
+        }
+        .review {
+            border: 1px solid rgba(0,0,0,0.2);
+            padding-left: 1%;
+            padding-right: 1%;
+        }
+        #delete {
+            display: inline;
+        }
+        .address {
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            margin-bottom: 1%;
+            width: 25%;
+            padding-left: 1%;
+            padding-right: 1%;
+            padding-top: 1%;
+            float: inherit;
+        }
+        .img {
+            height: 180px;
+            width: 180p  x;
+        }
+        .x {
+            text-align: center;
+        } 
+        #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 500px;
+        }
+    </style>
+  <script src="https://js.arcgis.com/4.8/"></script>
+</head>
+
+<body>
+        <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a id="logo" class="navbar-brand" href="/">ClinicApp</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/doctors">View Doctors</a></li>
+                            <% if(!currentuser){ %>
+                            <li><a href="/signin">Login</a></li>
+                            <li><a href="/signup">Sign-up</a></li>
+                            <% } else { 
+                                if(currentuser.type == "doctor"){ %>
+                                    <li><a href="#">Signed In As Dr <%= currentuser.fname %></a></li>
+                                    <% if(!currentuser.description){ %>
+                                    <li><a href="/details/<%= currentuser._id %>">Add Details</a></li>
+                                    <% } %>
+                                    <li><a href="/aplist">Appointments</a></li>
+                                    <li><a href="/stats">Stats</a></li>
+                                <% } 
+                                if(currentuser.type == "patient"){ %>
+                                    <li><a href="#">Signed In As <%= currentuser.fname %></a></li>
+                                    <li><a href="/patienthome">My Appointments</a></li>
+                                <% } %>
+                            <li><a href="/logout">Logout</a></li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+  <div class="container">   
+    <div class="x">    
+            <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
+            </div>
+            <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
+            
+            <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
+            <div class="address">
+            <legend style="font-size: 125%;">Address</legend>
+            
+            <p style="font-size: 125%;"><%= doctor.address %></p>
+            <div id="viewDiv"></div>
+        </div>
+        
+            <div class="description">
+                <h3>About Dr <%= doctor.fname + " " +doctor.lname %></h3>
+                <p id="description"><%= doctor.description %></p>
+            </div>
+            <fieldset>
+                <h3>Available Timings</h3>
+                <table class="table table-borderless" >
+                    <tr>
+                    <th>Day</th>
+                    <th>From</th> 
+                    <th>To</th>
+                    </tr>
+                <% doctor.schedule.forEach(function(schedule){ %>
+                    <tr>
+                        <td><%= schedule.day.toUpperCase() %></td>
+                        <td><%= schedule.from + ":00" %></td> 
+                        <td><%= schedule.to + ":00" %></td>
+                    </tr>
+                <% }) %>
+                </table>
+            </fieldset>
+            <% if((!currentuser)||(currentuser.type=="patient")) {%>
+            <div>
+                    <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
+            </div>
             <% } %>
-        </p>
-    <% }) %>
-    <% if((!currentuser)||(currentuser.type=="patient")) {%>
-    <p>
-        <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
-    </p>
-    </div>
-    <% }%>
-</div>
+            <%
+            var i=0,sum=0;
+            doctor.appointments.forEach(function(appointment){
+                if(appointment.status=="CNF")
+                {
+                    sum+=Number(appointment.billamount);
+                    i++;
+                }
+            })
+            var acpu=Math.round(sum/i);%>
+            <h4><strong>Average Consulting Charges:</strong> <%=acpu%></h4>
+            <div class="review">
+            <h3>REVIEWS</h3>
+            <% doctor.reviews.forEach(function(review){ %>
+                <p style="font-size: 125%;">
+                    <strong><%= review.author.username %></strong> - <%= review.text %> 
+                    <% if(currentuser && review.author.id.equals(currentuser._id)){ %>
+                        <form id="delete-form" action="/doctors/<%=review._id %>/deletereview" method="POST">
+                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                        </form>
+                    <% } %>
+                </p>
+            <% }) %>
+            <% if((!currentuser)||(currentuser.type=="patient")) {%>
+            <p>
+                <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
+            </p>
+            </div>
+            <% }%>
+    
+  </div>
+
+    <script>
+        require(["esri/Map", "esri/views/MapView"], function(Map, MapView) {
+        const map = new Map({
+            basemap: "streets-navigation-vector"
+        });
+
+        const view = new MapView({
+            container: "viewDiv",
+            map: map,
+            zoom: 12,
+            center: {
+            latitude: 19.18323,
+            longitude: 72.946305
+            }
+        });
+
+        const contentString =
+            "The <a href='http://zoo.sandiegozoo.org/'>San Diego Zoo</a> " +
+            " in Balboa Park houses over 3,700 animals." +
+            "<p><p><img src='https://visitoceanside.org/wp-content/uploads/2013/01/SanDiegoZoo.jpg' alt='San Diego Zoo' height='150'>";
+        view.graphics.add({
+            symbol: {
+            type: "text",
+            color: "#7A003C",
+            text: "\ue61d", // esri-icon-map-pin
+            font: {
+                size: 30,
+                family: "CalciteWebCoreIcons"
+            }
+            },
+            geometry: {
+            type: "point",
+            latitude: 19.16709000000003,
+            longitude: 72.95548000000008
+            },
+            popupTemplate: {
+            title: "San Diego Zoo",
+            content: contentString
+            }
+        });
+        });
+    </script>
+</body>
+</html>

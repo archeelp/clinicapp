@@ -1,3 +1,5 @@
+require('isomorphic-fetch');
+require('isomorphic-form-data');
 var express = require("express"),
     app = express(),
 	bodyParser = require("body-parser"),
@@ -12,7 +14,10 @@ var express = require("express"),
 	appointment = require("./models/appointment"),
 	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
 	faker = require("faker"),
-    databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
+	databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
+	
+const arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding');
+const { geocode } = arcgisRestGeocoding;
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
@@ -62,8 +67,7 @@ cloudinary.config({
 //MULTER AND CLOUDINARY CONFIGURATION COMPLETE
 
 //FAKER
-/*
-var imgurl =[
+/*var imgurl =[
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVV2C9Wd4dmYbsUCn_H5I4BMn9UYZsKmwvQcKVcaKMCMuXJB58",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz3WNCwhrhQPga14FTBfxLHWNRTgdHq8ahRNt5JT-1XtuYPtNp",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyNRmjP2FnYIhyfAY3Uk_SpTVPaPWhSfRb_f3z598ER0dxIFuw",
@@ -112,8 +116,7 @@ for(i=0;i<16;i++){
 				newlyCreated.save();
 		}
     });
-}
-*/
+}*/
 //COMPLETE
 
 app.use(function(req, res, next){
@@ -361,7 +364,11 @@ app.get("/doctors/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("show", {doctor: founddoctor});
+			geocode(founddoctor.address);
+			// console.log(response.candidates[0].location); ERROR https://github.com/nax3t/simple-arcgis-geocoding-api-test
+			res.render("show", {
+				doctor: founddoctor,
+			});
         }
     });
 });
