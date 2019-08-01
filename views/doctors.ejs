@@ -7,6 +7,9 @@
         </div>
     </form>
 </p>
+<%if(noMatch){%>
+<h1>NO MATCH FOUND</h1>
+<%}else{%>
  <div class="container">
       <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% doctors.forEach(function(doctor){
@@ -23,6 +26,6 @@
             </div>
         <% }}); %>
     </div>
-</div>
+</div><%}%>
 
 <% include partials/footer %>
