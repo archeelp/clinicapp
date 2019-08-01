@@ -39,17 +39,45 @@
         padding-top: 1%;
     }
     .img {
-        height: 180px;
-        width: 180p  x;
+        display: inline;
+        margin: 0 auto;
+        /*margin-left: -15%;
+        margin-top: -15%; */
+        height: 100%;
+        width: auto;
     }
     .x {
-        text-align: center;
+        width: 200px;
+        height: 200px;
+        position: relative;
+        left: 45%;
+        justify-content: center;
+    
+        overflow: hidden;
+        border-radius: 50%;
     } 
+
+    /*.delbutton {
+        position:relative;
+        left: 50%;
+        justify-content: center;
+    }
+    .changePic {
+        background-color: crimson;
+        color: white;
+        border-radius: 6px;
+        padding: 10px 24px;
+        text-align: center;
+        display: inline-block;
+        font-size: 12px;
+    }*/
 </style>
 <div class = container>
     <div class="x">    
-    <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
-    </div>
+    <img class="img" class="img-responsive" src="<%= doctor.image %>">
+    </div><br>
+    <!--<div class="delbutton">
+    <button type="button" class="changePic">Change</button></div>-->
     <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
     
     <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
@@ -113,4 +141,3 @@
     </div>
     <% }%>
 </div>
-<% include partials/footer %>
