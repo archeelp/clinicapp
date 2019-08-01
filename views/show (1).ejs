@@ -1,0 +1,144 @@
+<% include partials/header %>
+<link href="https://fonts.googleapis.com/css?family=Noto+Serif+TC&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<style>
+    h1 {
+        font-family: 'Open Sans', sans-serif;
+    }
+    #description {
+        font-size: 125%;
+        font-weight: 500;
+    }
+    .description {
+        border: 1px solid rgba(0,0,0,0.2);
+        padding-left: 5px;
+    }
+    th {
+        font-size: 125%;
+        text-align: left;
+    }
+    #button {
+        font-weight: bold;
+        padding: auto;
+        font-size: 110%;
+    }
+    .review {
+        border: 1px solid rgba(0,0,0,0.2);
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+    #delete {
+        display: inline;
+    }
+    .address {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 1%;
+        width: 25%;
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-top: 1%;
+    }
+    .img {
+        display: inline;
+        margin: 0 auto;
+        /*margin-left: -15%;
+        margin-top: -15%; */
+        height: 100%;
+        width: auto;
+    }
+    .x {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        left: 45%;
+        justify-content: center;
+    
+        overflow: hidden;
+        border-radius: 50%;
+    } 
+
+    /*.delbutton {
+        position:relative;
+        left: 50%;
+        justify-content: center;
+    }
+    .changePic {
+        background-color: crimson;
+        color: white;
+        border-radius: 6px;
+        padding: 10px 24px;
+        text-align: center;
+        display: inline-block;
+        font-size: 12px;
+    }*/
+</style>
+<div class = container>
+    <div class="x">    
+    <img class="img" class="img-responsive" src="<%= doctor.image %>">
+    </div><br>
+    <!--<div class="delbutton">
+    <button type="button" class="changePic">Change</button></div>-->
+    <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
+    
+    <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
+    <div class="address">
+    <legend style="font-size: 125%;">Address</legend>
+    <p style="font-size: 125%;"><%= doctor.address %></p>
+</div>
+    <div class="description">
+        <h3>About Dr <%= doctor.fname + " " +doctor.lname %></h3>
+        <p id="description"><%= doctor.description %></p>
+    </div>
+    <fieldset>
+        <h3>Available Timings</h3>
+        <table class="table table-borderless" >
+            <tr>
+            <th>Day</th>
+            <th>From</th> 
+            <th>To</th>
+            </tr>
+        <% doctor.schedule.forEach(function(schedule){ %>
+            <tr>
+                <td><%= schedule.day.toUpperCase() %></td>
+                <td><%= schedule.from + ":00" %></td> 
+                <td><%= schedule.to + ":00" %></td>
+            </tr>
+        <% }) %>
+        </table>
+    </fieldset>
+    <% if((!currentuser)||(currentuser.type=="patient")) {%>
+    <div>
+            <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
+    </div>
+    <% } %>
+    <%
+    var i=0,sum=0;
+    doctor.appointments.forEach(function(appointment){
+        if(appointment.status=="CNF")
+        {
+            sum+=Number(appointment.billamount);
+            i++;
+        }
+    })
+    var acpu=Math.round(sum/i);%>
+    <h4><strong>Average Consulting Charges:</strong> <%=acpu%></h4>
+    <div class="review">
+    <h3>REVIEWS</h3>
+    <% doctor.reviews.forEach(function(review){ %>
+        <p style="font-size: 125%;">
+            <strong><%= review.author.username %></strong> - <%= review.text %> 
+            <% if(currentuser && review.author.id.equals(currentuser._id)){ %>
+                <form id="delete-form" action="/doctors/<%=review._id %>/deletereview" method="POST">
+                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                </form>
+            <% } %>
+        </p>
+    <% }) %>
+    <% if((!currentuser)||(currentuser.type=="patient")) {%>
+    <p>
+        <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
+    </p>
+    </div>
+    <% }%>
+</div>
+<% include partials/footer %>
