@@ -25,9 +25,9 @@
                    <div class="caption">
                        <h4><%= doctor.fname %></h4>
                    </div>
-                   <p>
-                       <% if(String(doctor.description).length > 20) {%>
-                        <%= String(doctor.description).slice(0,20) + "..." %>
+                   <p style="font-size: 110%;">
+                       <% if(String(doctor.description).length > 60) {%>
+                        <%= String(doctor.description).slice(0,60) + "..." %>
                         <%} else{%>
                         <%= String(doctor.description)%>
                         <%}%>
