@@ -16,8 +16,8 @@ var express = require("express"),
 	faker = require("faker"),
 	databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
 	
-const arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding');
-const { geocode } = arcgisRestGeocoding;
+	var arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding');
+	var { geocode } = arcgisRestGeocoding;
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
@@ -350,13 +350,31 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
 });
 
 app.get("/doctors",function(req,res){
-	user.find({}, function(err, alldoctors){
-		if(err){
-			console.log(err);
-		} else {
-		   res.render("doctors",{doctors:alldoctors});
-		}
-	})
+	//
+	var noMatch = false;
+    if(req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get all users from DB
+        user.find({fname: regex}, function(err, alldoctors){
+           if(err){
+               console.log(err);
+           } else {
+              if(alldoctors.length < 1) {
+                  noMatch = true;
+              }
+              res.render("doctors",{doctors:alldoctors, noMatch: noMatch});
+           }
+        });
+    } else {
+        // Get all users from DB
+        user.find({}, function(err, alldoctors){
+           if(err){
+               console.log(err);
+           } else {
+              res.render("doctors",{doctors:alldoctors, noMatch: noMatch});
+           }
+        });
+    }
 });
 
 app.get("/doctors/:id", function(req, res){
@@ -364,10 +382,13 @@ app.get("/doctors/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-			geocode(founddoctor.address);
-			// console.log(response.candidates[0].location); ERROR https://github.com/nax3t/simple-arcgis-geocoding-api-test
-			res.render("show", {
-				doctor: founddoctor,
+			geocode(founddoctor.address)
+			.then((response) => {
+			  loc={x:response.candidates[0].location.x,
+				y:response.candidates[0].location.y}; 
+				res.render("show", {
+					doctor: founddoctor,loc:loc
+				});
 			});
         }
     });
@@ -590,6 +611,10 @@ function ispatient(req, res, next){
     }
     res.redirect("/signin");
 }
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 app.listen(process.env.PORT||3000, function(){
 	console.log("The Clinicapp Server Has Started!");

@@ -53,7 +53,7 @@
         }
         .img {
             height: 180px;
-            width: 180p  x;
+            width: 180px;
         }
         .x {
             text-align: center;
@@ -182,8 +182,8 @@
             map: map,
             zoom: 12,
             center: {
-            latitude: 19.18323,
-            longitude: 72.946305
+            latitude: <%-JSON.stringify(loc.x);%>,
+            longitude: <%-JSON.stringify(loc.y);%>
             }
         });
 
@@ -203,8 +203,8 @@
             },
             geometry: {
             type: "point",
-            latitude: 19.16709000000003,
-            longitude: 72.95548000000008
+            latitude: <%-JSON.stringify(loc.x);%>,
+            longitude: <%-JSON.stringify(loc.y);%>
             },
             popupTemplate: {
             title: "San Diego Zoo",

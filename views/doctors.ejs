@@ -1,4 +1,12 @@
 <% include partials/header %>
+<p>
+    <form action="/doctors" method="GET" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="search" placeholder="Doctor search..." class="form-control">
+            <input type="submit" value="Search" class="btn btn-search">
+        </div>
+    </form>
+</p>
  <div class="container">
       <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% doctors.forEach(function(doctor){
