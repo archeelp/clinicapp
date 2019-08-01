@@ -377,7 +377,19 @@ app.get("/doctors",function(req,res){
     }
 });
 
-app.get("/doctors/:id", function(req, res){
+app.get("/doctors/:id",function(req, res, next){
+	user.findById(req.params.id, function(err, doctor){
+        if(err){
+            res.redirect("back");
+        } else {
+			if(doctor.type=="doctor"&&doctor.address){
+				return next();
+			}
+			else
+			res.redirect("back");
+        }
+});
+}, function(req, res){
 	user.findById(req.params.id).populate("reviews").populate("appointments").exec(function(err, founddoctor){
         if(err){
             console.log(err);
@@ -404,7 +416,26 @@ app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
     });
 });
 
-app.get("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
+app.get("/doctors/:id/newreview",isLoggedIn,ispatient,
+function(req, res, next){
+    appointment.find({doctorid:req.params.id,patientid:req.user._id},function(err, foundappointment){
+        if(err){
+            console.log(err);
+        } else {
+			var d=new Date();
+			if(!foundappointment[0])
+			res.redirect("back");
+            else {
+				if(foundappointment[0].appointmentdate.getTime()<d.getTime())
+				{
+					console.log(foundappointment);
+					return next();
+				}
+				else res.redirect("back");
+        }}
+    });
+}
+,function(req, res){
     // find doctor by id
 		user.findById(req.params.id, function(err, doctor){
         if(err){
