@@ -137,6 +137,10 @@
     <div class="x">    
             <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
             </div>
+           <% if(currentuser && doctor._id.equals(currentuser._id)){%>
+            <div>
+                <a id="button" class="btn btn-primary" href="/picupdate">Update Profile</a>
+            </div><%}%>
             <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
             
             <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
@@ -169,6 +173,10 @@
                 <% }) %>
                 </table>
             </fieldset>
+            <%if(currentuser && doctor._id.equals(currentuser._id)){%>
+            <div>
+                <a id="button" class="btn btn-primary" href="/profileupdate">Update Appointment Schedule</a>
+        </div><% } %>
             <% if((!currentuser)||(currentuser.type=="patient")) {%>
             <div>
                     <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>

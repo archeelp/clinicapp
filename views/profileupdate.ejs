@@ -1,0 +1,130 @@
+<% include partials/header %>
+<style>
+    #button {
+        text-align: center;
+    }
+    input[type="checkbox"] {
+        margin-right: 5px;
+        margin-top: 5px;
+    }
+    .pding {
+        padding-left: 50px;
+    }
+    input[type="number"] {
+        width: 50px;
+    }
+    .submitButton {
+        height: 40px;
+        background: #0062ff;
+        border: none;
+        color: white;
+        border-radius: 18px;
+        font-weight: bold;
+        font-size: 125%;
+    }
+    .notVisible {
+        display: none;
+    }
+    .textarea {
+        width: 100%;
+        height: 125px;
+        font-size: 2.0rem;
+        text-align: left;
+        padding: 5px;
+    }
+    #lbl {
+        margin-top: 1%;
+        font-size: 150%;
+    }
+</style>
+ <form action="/profileupdate" method="POST" >
+<div class="container">
+    <div class="row">
+                <fieldset>
+                    <legend>Update your timings</legend>
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>Monday</td>
+                                <td class="pding"><input class="chbx" id="CHECK" name="id0" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id0from" type="number"> <label>To</label> <input name="id0to" type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Tuesday</td>
+                                    <td class="pding"><input class="chbx" name="id1" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id1from" type="number"> <label>To</label> <input name="id1to" type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Wednesday</td>
+                                    <td class="pding"><input class="chbx" name="id2" type="checkbox"></td>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id2from" type="number"> <label>To</label> <input name="id2to" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td>Thursday</td>
+                                <td class="pding"><input class="chbx" name="id3" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id3from" type="number"> <label>To</label> <input name="id3to" type="number"></td>
+                            </tr>
+                            <tr>
+                                    <td>Friday</td>
+                                    <td class="pding"><input class="chbx" name="id4" type="checkbox"></td>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id4from" type="number"> <label>To</label> <input name="id4to" type="number"></td>
+                                </tr>
+                            <tr>
+                                <td>Saturday</td>
+                                <td class="pding"><input class="chbx" name="id5" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id5from" type="number"> <label>To</label> <input name="id5to" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td>Sunday</td>
+                                <td class="pding"><input class="chbx" name="id6" type="checkbox"></td>
+                                <td class="notVisible time pding"><label>From</label> <input name="id6from" type="number"> <label>To</label> <input name="id6to" type="number"></td>
+                            </tr>    
+                        </table>
+                        </div>
+                </fieldset>
+                <div style="text-align: center">
+                    <button style="width: 20%" class="submitButton">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    document.querySelectorAll("input[type=\"number\"]").forEach(function(el) {
+        el.min = 9;
+        el.max = 21;
+    })
+
+    var chbxs = document.querySelectorAll(".chbx"),
+        timeIn = document.querySelectorAll(".time");
+
+    chbxs[0].addEventListener("click", function() {
+        timeIn[0].classList.toggle("notVisible");
+    })
+
+    chbxs[1].addEventListener("click", function() {
+        timeIn[1].classList.toggle("notVisible");
+    })
+
+    chbxs[2].addEventListener("click", function() {
+        timeIn[2].classList.toggle("notVisible");
+    })
+
+    chbxs[3].addEventListener("click", function() {
+        timeIn[3].classList.toggle("notVisible");
+    })
+
+    chbxs[4].addEventListener("click", function() {
+        timeIn[4].classList.toggle("notVisible");
+    })
+
+    chbxs[5].addEventListener("click", function() {
+        timeIn[5].classList.toggle("notVisible");
+    })
+
+    chbxs[6].addEventListener("click", function() {
+        timeIn[6].classList.toggle("notVisible");
+    });
+</script>
+<% include partials/footer %>

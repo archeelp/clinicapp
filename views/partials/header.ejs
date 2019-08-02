@@ -30,7 +30,7 @@
                     <li><a href="/signup">Sign-up</a></li>
                     <% } else { 
                         if(currentuser.type == "doctor"){ %>
-                            <li><a href="#">Signed In As Dr <%= currentuser.fname %></a></li>
+                            <li><a href="/doctors/<%=currentuser._id%>">Signed In As Dr <%= currentuser.fname %></a></li>
                             <% if(!currentuser.description){ %>
                             <li><a href="/details/<%= currentuser._id %>">Add Details</a></li>
                             <% } %>
