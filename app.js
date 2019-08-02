@@ -379,10 +379,11 @@ app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
 
 app.get("/logout",isLoggedIn,function(req,res){
 	req.logout();
+	req.flash("success","Loggeed You Out Successfully");
 	res.redirect("/");
 });
 
-app.post("/signup",function(req,res){
+app.post("/signup",nouser,function(req,res){
 	var suser = {
 		username: req.sanitize(req.body.username),
 		type: req.body.type,
@@ -396,9 +397,10 @@ app.post("/signup",function(req,res){
 			req.flash("error","A User With That Username Already Exists");
 			return res.render("signup");
 		}
-		passport.authenticate("local")(req, res, function(){
-			res.redirect("/signin");
-		});
+        passport.authenticate("local")(req, res, function(){
+           req.flash("success", "Welcome to YelpCamp " + newlyCreated.fname);
+           res.redirect("/signin"); 
+        });
     });
 });
 
