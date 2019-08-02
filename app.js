@@ -379,11 +379,10 @@ app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
 
 app.get("/logout",isLoggedIn,function(req,res){
 	req.logout();
-	req.flash("success","Loggeed You Out Successfully");
 	res.redirect("/");
 });
 
-app.post("/signup",nouser,function(req,res){
+app.post("/signup",function(req,res){
 	var suser = {
 		username: req.sanitize(req.body.username),
 		type: req.body.type,
@@ -397,10 +396,9 @@ app.post("/signup",nouser,function(req,res){
 			req.flash("error","A User With That Username Already Exists");
 			return res.render("signup");
 		}
-        passport.authenticate("local")(req, res, function(){
-           req.flash("success", "Welcome to YelpCamp " + newlyCreated.fname);
-           res.redirect("/signin"); 
-        });
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/signin");
+		});
     });
 });
 
@@ -429,73 +427,72 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
 			res.redirect("back");
         } else {
 			if(result.secure_url)
-			{
-			founddoctor.image = result.secure_url;
-			founddoctor.image_id = result.public_id;
-			founddoctor.description=req.sanitize(req.body.description);
-			founddoctor.address = req.sanitize(req.body.address);
-			geocode(founddoctor.address)
-			.then((response) => {
-				founddoctor.loc.x = response.candidates[0].location.x;
-				founddoctor.loc.y = response.candidates[0].location.y;
-			});			
-			if(req.body.id0 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[0],
-						from :req.body.id0from,
-						to :req.body.id0to
-				});
-				}
-				if(req.body.id1 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[1],
-						from :req.body.id1from,
-						to :req.body.id1to
-				});
-				}if(req.body.id2 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[2],
-						from :req.body.id2from,
-						to :req.body.id2to
-				});
-				}
-				if(req.body.id3 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[3],
-						from :req.body.id3from,
-						to :req.body.id3to
-				});
-				}
-				if(req.body.id4 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[4],
-						from :req.body.id4from,
-						to :req.body.id4to
-				});
-				}
-				if(req.body.id5 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[5],
-						from :req.body.id5from,
-						to :req.body.id5to
-				});
-				}
-				if(req.body.id6 == "on")
-				{
-					founddoctor.schedule.push({
-						day :days[6],
-						from :req.body.id6from,
-						to :req.body.id6to
-				});
-                }
-			founddoctor.save();
-			res.redirect("/aplist");
+			{		geocode(req.sanitize(req.body.address)).then((response) => {
+						founddoctor.loc.x = response.candidates[0].location.x;
+						founddoctor.loc.y = response.candidates[0].location.y;
+						console.log(founddoctor.loc);
+						founddoctor.image = result.secure_url;
+						founddoctor.image_id = result.public_id;
+						founddoctor.description=req.sanitize(req.body.description);
+						founddoctor.address = req.sanitize(req.body.address);	
+						if(req.body.id0 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[0],
+									from :req.body.id0from,
+									to :req.body.id0to
+							});
+							}
+							if(req.body.id1 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[1],
+									from :req.body.id1from,
+									to :req.body.id1to
+							});
+							}if(req.body.id2 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[2],
+									from :req.body.id2from,
+									to :req.body.id2to
+							});
+							}
+							if(req.body.id3 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[3],
+									from :req.body.id3from,
+									to :req.body.id3to
+							});
+							}
+							if(req.body.id4 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[4],
+									from :req.body.id4from,
+									to :req.body.id4to
+							});
+							}
+							if(req.body.id5 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[5],
+									from :req.body.id5from,
+									to :req.body.id5to
+							});
+							}
+							if(req.body.id6 == "on")
+							{
+								founddoctor.schedule.push({
+									day :days[6],
+									from :req.body.id6from,
+									to :req.body.id6to
+							});
+							}
+						founddoctor.save();
+						res.redirect("/aplist");
+					});
 			}
 			else{
 				req.flash("error","An Error Occured!! Please Try Again Later");

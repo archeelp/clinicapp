@@ -33,6 +33,7 @@
             font-weight: bold;
             padding: auto;
             font-size: 110%;
+            margin: 1% 0 0 3%;
         }
         .review {
             border: 1px solid rgba(0,0,0,0.2);
@@ -175,7 +176,7 @@
             </fieldset>
             <%if(currentuser && doctor._id.equals(currentuser._id)){%>
             <div>
-                <a id="button" class="btn btn-primary" href="/profileupdate">Update Appointment Schedule</a>
+                <a style="font-weight: bold;" class="btn btn-primary" href="/profileupdate">Update Appointment Schedule</a>
         </div><% } %>
             <% if((!currentuser)||(currentuser.type=="patient")) {%>
             <div>
@@ -225,8 +226,8 @@
             map: map,
             zoom: 15,
             center: {
-            latitude: <%-JSON.stringify(doctor.loc.y);%>,
-            longitude: <%-JSON.stringify(doctor.loc.x);%>
+            latitude: <%-doctor.loc.y%>,
+            longitude: <%-doctor.loc.x%>
             }
         });
 
@@ -242,8 +243,8 @@
             },
             geometry: {
             type: "point",
-            latitude: <%-JSON.stringify(doctor.loc.y);%>,
-            longitude: <%-JSON.stringify(doctor.loc.x);%>
+            latitude: <%-doctor.loc.y%>,
+            longitude: <%-doctor.loc.x%>
             },
             popupTemplate: {
             title: "Doctors Address : "+ <%-JSON.stringify(doctor.address);%>
