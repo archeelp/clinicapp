@@ -116,6 +116,7 @@
             <h1><%= "Dr " + doctor.fname + " " +doctor.lname %></h1>
             
             <p style="font-weight: 800; font-size: 125%"><%= "Email: " + doctor.email %></p>
+            
             <div class="address">
             <legend style="font-size: 125%;">Address</legend>
             
@@ -190,17 +191,13 @@
         const view = new MapView({
             container: "viewDiv",
             map: map,
-            zoom: 12,
+            zoom: 15,
             center: {
             latitude: <%-JSON.stringify(loc.y);%>,
             longitude: <%-JSON.stringify(loc.x);%>
             }
         });
 
-        const contentString =
-            "The <a href='http://zoo.sandiegozoo.org/'>San Diego Zoo</a> " +
-            " in Balboa Park houses over 3,700 animals." +
-            "<p><p><img src='https://visitoceanside.org/wp-content/uploads/2013/01/SanDiegoZoo.jpg' alt='San Diego Zoo' height='150'>";
         view.graphics.add({
             symbol: {
             type: "text",
@@ -217,8 +214,7 @@
             longitude: <%-JSON.stringify(loc.x);%>
             },
             popupTemplate: {
-            title: "San Diego Zoo",
-            content: contentString
+            title: "Doctors Address : "+ <%-JSON.stringify(doctor.address);%>
             }
         });
         });

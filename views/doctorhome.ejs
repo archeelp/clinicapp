@@ -10,8 +10,8 @@
 <% }
 else { %>
 <fieldset>
-        <h3>Appointment Schedule</h3>
-        <table class="table table-borderless" >
+        <h3 style="margin-left: 1%;">Appointment Schedule</h3>
+        <table style="margin: 0 1% 0 1%;" class="table table-borderless" >
             <tr>
             <th>Patient Name</th>
             <th>Contact Number</th>
@@ -21,7 +21,8 @@ else { %>
             </tr>
         <% appointments.forEach(function(appointment){ 
             if(appointment.status!="R"){%>
-            <tr>
+        
+                <tr>
                 <% var month = appointment.appointmentdate.getMonth() +1; %>
                 <td><%= appointment.patientname.toUpperCase() %></td>
                 <td><%= appointment.patientcn %></td>
@@ -52,15 +53,16 @@ else { %>
     </fieldset>
 <% } %>
 <%if(addappo){%>
-    <form id="signup" method="POST" action="/addappointment" >
+<form id="signup" method="POST" action="/addappointment" >
     <% var month = T.getMonth() +1; %>
         <div class="form">
             <table class="table table-borderless" >
             <tr>
-            <td><input name="patientname" type="text" class="form-control" placeholder="Patient's Name" required></td>
-            <td><input name="patientcn" type="text" class="form-control" placeholder="Contact Number" required></td>
-            <td style="padding-top: 1%; width : 5.55%;"><%= T.getDate() + " / " + month + " / " + T.getFullYear() %></td> 
-            <td><button class="btn btn-success" name="appointmentdate" value="<%= T %>" id="register">Add Appointment</button></td>
+            <td style="width: 15%;"><input name="patientname" type="text" class="form-control" placeholder="Patient's Name" required></td>
+            <td style="padding-left: 5.5%; padding-right: 5%;"><input name="patientcn" type="text" class="form-control" placeholder="Contact Number" required></td>
+            <td style="padding-left: 0.5%;"><%= T.getDate() + "/" + month + "/" + T.getFullYear() %></td> 
+            <td style="width: 23%;"></td>
+            <td style="padding-left: 2%;"><button class="btn btn-success" name="appointmentdate" value="<%= T %>" id="register">Add Appointment</button></td>
             <tr>
             </table>
         </div>

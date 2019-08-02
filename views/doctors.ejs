@@ -4,6 +4,9 @@
         margin-bottom: 1%;
         text-align: center;
     }
+    img {
+        border-radius: 50%;
+    }
 </style>
  <div class="container">
         <div class="search">
@@ -20,18 +23,24 @@
       <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% doctors.forEach(function(doctor){
             if(doctor.type == "doctor"&&doctor.address) {%>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-6 col-sm-6">
                 <div class="thumbnail">
                    <div class="caption">
-                       <h4><%= doctor.fname %></h4>
+                       <h3><%= doctor.fname %></h3>
                    </div>
-                   <p style="font-size: 110%;">
+                  <div style="height: 100px; width: 100px; margin-left: 41%;">    
+            <img class="img" class="img-responsive" src="<%= doctor.image %>" height="100px" width="100px"><br>
+                </div>
+            <p style="font-size: 130%;">
                        <% if(String(doctor.description).length > 60) {%>
                         <%= String(doctor.description).slice(0,60) + "..." %>
                         <%} else{%>
                         <%= String(doctor.description)%>
                         <%}%>
                     </p> 
+                    <p style="font-size: 140%;">
+                        <%= doctor.address%>
+                    </p>
                    <p>
                        <a href="/doctors/<%= doctor.id %>" class="btn btn-primary">More Info</a>
                    </p>
