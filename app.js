@@ -110,7 +110,7 @@ var imgurl =[
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK8laymHV1vVTD0fK1sLa_-FPQ-sS7EWAAqzpa4mv_AYBaEtDozA",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbMP5N9brH2djTqaSVJ5XgMKKexBaJAVvUwjw3p8mZjzcU2MiO",
 ];
-for(i=0;i<16;i++){
+for(i=0;i<40;i++){
 	var suser = {
 		username: faker.internet.userName(),
 		type: "doctor",
@@ -176,7 +176,7 @@ app.get("/aplist",isLoggedIn,isdoctor,function(req,res){
 
 app.get("/stats",isLoggedIn,isdoctor,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
-        if(err){
+        if(err||!founddoctor){
             console.log(err);
         } else {
 			var appo=[];
@@ -264,7 +264,7 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 
 app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, foundpatient){
-        if(err){
+        if(err||!foundpatient){
             req.flash("error","Sorry!! An error occured");
 			res.redirect("back");
         } else {
@@ -288,7 +288,7 @@ app.post("/signup",function(req,res){
 		contactnumber: req.sanitize(req.body.contactnumber)
 	};
     user.register(suser, req.body.password ,function(err, newlyCreated){
-        if(err){
+        if(err||!newlyCreated){
 			req.flash("error","A User With That Username Already Exists");
 			return res.render("signup");
 		}
@@ -430,7 +430,7 @@ app.get("/doctors",function(req,res){
 
 app.get("/doctors/:id",function(req, res, next){
 	user.findById(req.params.id, function(err, doctor){
-        if(err){
+        if(err||!doctor){
 			req.flash("error","Doctor Not Found");
 			res.redirect("back");
         } else {
@@ -445,7 +445,7 @@ app.get("/doctors/:id",function(req, res, next){
 });
 }, function(req, res){
 	user.findById(req.params.id).populate("reviews").populate("appointments").exec(function(err, founddoctor){
-        if(err){
+        if(err||!founddoctor){
             console.log(err);
         } else {
 			// geocode(founddoctor.address);
@@ -463,7 +463,7 @@ app.get("/doctors/:id",function(req, res, next){
 
 app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
 	user.findById(req.params.id).populate("appointments").exec(function(err, foundpatient){
-        if(err){
+        if(err||!foundappointment){
             req.flash("error","Patient Not Found");
 			res.redirect("back");
         } else {
@@ -475,7 +475,7 @@ app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
 app.get("/doctors/:id/newreview",isLoggedIn,ispatient,
 function(req, res, next){
     appointment.find({doctorid:req.params.id,patientid:req.user._id},function(err, foundappointment){
-        if(err){
+        if(err||!foundappointment){
 			req.flash("error","An Error Occured!! Please Try Again");
 			res.redirect("back");
         } else {
@@ -500,7 +500,7 @@ function(req, res, next){
 ,function(req, res){
     // find doctor by id
 		user.findById(req.params.id, function(err, doctor){
-        if(err){
+        if(err||!doctor){
             console.log(err);
         } else {
              res.render("newreview", {doctor: doctor});
@@ -510,12 +510,12 @@ function(req, res, next){
 
 app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 	user.findById(req.params.id, function(err, doctor){
-		if(err){
+		if(err||!doctor){
 			req.flash("error","An Error Occured!! Please Try Again");
 			res.redirect("back");
 		} else {
 		 review.create(req.body.review, function(err, review){
-			if(err){
+			if(err||!review){
 				console.log(err);
 			} else {
 				review.author.id = req.sanitize(req.user._id);
@@ -533,7 +533,7 @@ app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 
  app.get("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
 		user.findById(req.params.id, function(err, doctor){
-        if(err){
+        if(err||!doctor){
             req.flash("error","An Error Occured!! Please Try Again");
 			res.redirect("back");
         } else {
@@ -544,7 +544,7 @@ app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 
 app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
 	user.findById(req.params.id, function(err, doctor){
-		if(err){
+		if(err||!doctor){
 			req.flash("error","An Error Occured!! Please Try Again");
 			res.redirect("back");
 		} else {
@@ -558,7 +558,7 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 				doctorid : doctor._id,
 				patientid : req.user._id
 				}, function(err, appointment){
-			if(err){
+			if(err||!appointment){
 				req.flash("error","An Error Occured!! Please Try Again");
 				res.redirect("back");
 			} else {
@@ -577,7 +577,7 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
  
  app.post("/addappointment",isLoggedIn,isdoctor, function(req, res){
 	user.findById(req.user.id, function(err, doctor){
-		if(err){
+		if(err||!doctor){
 			req.flash("error","An Error Occured!! Please Try Again");
 				res.redirect("back");
 		} else {
@@ -590,7 +590,7 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 				appointmentdate :req.body.appointmentdate,
 				doctorid : doctor._id
 				}, function(err, appointment){
-			if(err){
+			if(err||!appointment){
 				req.flash("error","An Error Occured!! Please Try Again");
 				res.redirect("back");
 			} else {
@@ -616,7 +616,7 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 	var pm = { id : req.params.id };
 	appointment.findById(req.params.id,function(err, foundappointment){
-        if(err){
+        if(err||!foundappointment){
             req.flash("error","Appointment Not Found");
 			res.redirect("back");
         } else {
@@ -627,7 +627,7 @@ app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 
 app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 	appointment.findById(req.params.id,function(err, foundappointment){
-        if(err){
+        if(err||!foundappointment){
             req.flash("error","Appointment Not Found");
 				res.redirect("back");
         } else {
@@ -670,7 +670,7 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 
 app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
 	appointment.findById(req.params.id,function(err, foundappointment){
-        if(err){
+        if(err||!foundappointment){
             req.flash("error","Appointment Not Found");
 			res.redirect("back");
         } else {
