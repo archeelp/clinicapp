@@ -1,33 +1,34 @@
 require('isomorphic-fetch');
 require('isomorphic-form-data');
-var express = require("express"),
-    app = express(),
-	bodyParser = require("body-parser"),
-	session = require("express-session"),
-	mongoose = require("mongoose"),
-	expressSanitizer = require("express-sanitizer"),
-	passport = require("passport"),
-	LocalStrategy = require("passport-local"),
-	passportLocalMongoose = require("passport-local-mongoose"),
-	user = require("./models/user"),
-	review = require("./models/review"),
-	appointment = require("./models/appointment"),
-	days =["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
-	faker = require("faker"),
-	databaseURL = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
-	
-	var arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding');
-	var { geocode } = arcgisRestGeocoding;
+var express					= require("express"),
+    app 					= express(),
+	bodyParser 				= require("body-parser"),
+	session 				= require("express-session"),
+	mongoose 				= require("mongoose"),
+	expressSanitizer 		= require("express-sanitizer"),
+	passport 				= require("passport"),
+	LocalStrategy 			= require("passport-local"),
+	passportLocalMongoose 	= require("passport-local-mongoose"),
+	user 				  	= require("./models/user"),
+	review 				  	= require("./models/review"),
+	appointment 		 	= require("./models/appointment"),
+	days 					=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
+	faker 					= require("faker"),
+	flash       			= require("connect-flash"),
+	databaseURL 			= process.env.DATABASEURL || 'mongodb://localhost/clinicapp';
+	arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding'),
+	{ geocode } = arcgisRestGeocoding;
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
 app.use(expressSanitizer());
+app.use(flash());
 
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
-    secret: "Once again Rusty wins cutest dog!",
+    secret: "We are clinicapp devlopers",
     resave: false,
     saveUninitialized: false
 }));
@@ -66,61 +67,89 @@ cloudinary.config({
 
 //MULTER AND CLOUDINARY CONFIGURATION COMPLETE
 
-//FAKER
-// var imgurl =[
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVV2C9Wd4dmYbsUCn_H5I4BMn9UYZsKmwvQcKVcaKMCMuXJB58",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz3WNCwhrhQPga14FTBfxLHWNRTgdHq8ahRNt5JT-1XtuYPtNp",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyNRmjP2FnYIhyfAY3Uk_SpTVPaPWhSfRb_f3z598ER0dxIFuw",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpZALWesbqageji2LOzFXRMPJ1LHGGf9_LzIsy3FlXW4-ZgW4B",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmJarQHXhA2Ia_wFdP7BcAigP6XYOodfJW2HIrWMKcZs90Do9MXA",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW_0LaX5oFL0sTR_lD7dkGkYfiQbgjM3wf64VMbz3N7TjZDUPS",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpzEMKsQO9Dp0p6ucQaGs24-8GNGfELL9V1lLKeJ8pTmGV3KcB",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpxkNYJ6KtsKx6WjV9qvAk4coqMzyy16HEL2JRQGeAxROXEIBv_A",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcdIp72bafvZvjZ8Ox23FVTLiknOUQYQtjcKKM-K4AUpYArT6d",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa_RWfFQvBdKuh09_xc1FIiINdbaevnMgECXuPTliIOXKcdLc3lw",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4MhB5szikoYS2O4wrSxf7Uv1ozK3g7Jvv9hMpVd1DWAjfO1rV",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyysKeS9tA8M9aMGM16Z2JoLGJw1FEcFazeBkvbb5hVjUXHszK",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG7nfyANOL6bnpWAM7t8Wa_qexZAv0Qbh4ZtytvimzeOCBEJCWBg",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFbW8Nchl9FZYzoViR6HfrX0CKxlOt25pcZXRMvQWHDnbF7vrl",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRonlKSi2v_FRMsiqTacpliFialJ-cKYDPaDsn2Fe4nihLCD6A60w",
-// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlhnl6GNOZMtYiBZjBN8MhZsem7lY--ixyfIsZvsP2spik2X-U6Q"
-// ];
-// for(i=0;i<16;i++){
-// 	var suser = {
-// 		username: faker.internet.userName(),
-// 		type: "doctor",
-// 		fname: faker.name.firstName(),
-// 		lname: faker.name.lastName(),
-// 		email: faker.internet.email(),
-// 		contactnumber: faker.phone.phoneNumber(),
-// 		image: imgurl[i],
-// 		address: faker.address.streetAddress(),
-// 		description: faker.lorem.paragraph()
-// 	};
-//     user.register(suser, "Arch1234" ,function(err, newlyCreated){
-//         if(err){
-// 			console.log(err);
-// 			return res.render("signup");
-// 		}
-// 		else{
-// 				newlyCreated.schedule.push({
-// 				day :"monday",
-// 				from :"10",
-// 				to :"12"
-// 				});
-// 				newlyCreated.schedule.push({
-// 					day :"tuesday",
-// 					from :"11",
-// 					to :"13"
-// 				});
-// 				newlyCreated.save();
-// 		}
-//     });
-// }
+// //FAKER
+var imgurl =[
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVV2C9Wd4dmYbsUCn_H5I4BMn9UYZsKmwvQcKVcaKMCMuXJB58",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz3WNCwhrhQPga14FTBfxLHWNRTgdHq8ahRNt5JT-1XtuYPtNp",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyNRmjP2FnYIhyfAY3Uk_SpTVPaPWhSfRb_f3z598ER0dxIFuw",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpZALWesbqageji2LOzFXRMPJ1LHGGf9_LzIsy3FlXW4-ZgW4B",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmJarQHXhA2Ia_wFdP7BcAigP6XYOodfJW2HIrWMKcZs90Do9MXA",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW_0LaX5oFL0sTR_lD7dkGkYfiQbgjM3wf64VMbz3N7TjZDUPS",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpzEMKsQO9Dp0p6ucQaGs24-8GNGfELL9V1lLKeJ8pTmGV3KcB",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpxkNYJ6KtsKx6WjV9qvAk4coqMzyy16HEL2JRQGeAxROXEIBv_A",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcdIp72bafvZvjZ8Ox23FVTLiknOUQYQtjcKKM-K4AUpYArT6d",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa_RWfFQvBdKuh09_xc1FIiINdbaevnMgECXuPTliIOXKcdLc3lw",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4MhB5szikoYS2O4wrSxf7Uv1ozK3g7Jvv9hMpVd1DWAjfO1rV",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyysKeS9tA8M9aMGM16Z2JoLGJw1FEcFazeBkvbb5hVjUXHszK",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG7nfyANOL6bnpWAM7t8Wa_qexZAv0Qbh4ZtytvimzeOCBEJCWBg",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFbW8Nchl9FZYzoViR6HfrX0CKxlOt25pcZXRMvQWHDnbF7vrl",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRonlKSi2v_FRMsiqTacpliFialJ-cKYDPaDsn2Fe4nihLCD6A60w",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlhnl6GNOZMtYiBZjBN8MhZsem7lY--ixyfIsZvsP2spik2X-U6Q",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7kZsZvtlvywBfHxPMVBDfdJf2zGNyyxHkO9amRCKmwIwS3aOE",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP78lnDrzvFbNrpVbqXLuWOpJRnzo9XctsaZle-x3Id2oZepFj",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWyrW2RIsMIT4JlKy4eXtW90hyAyGJiH4VyiGCAQg6U657qVww",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-GEu5a2iB-8pp49rzNSBiKRcoZ6qooZdzClcD9qp5Ord5p98C",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm6-1mr0XA8bUejNnUyVhUw-RPewYLlN4HDxVrrYW2vSTBfrjR",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtuiba2oW1u7uRyacSJquWPxDaT4xQw5aruaPyPGZhZUNcm_mW",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0s3n8uEPjkyw-hw6bMZ8Yb050QHrDsw9btOnRkJH0AdkfkKUz4Q",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD-gOtIqJgY4rU2tIGqQfVv-lJWwiyzmrj5UfacWjP3aws-_oL",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKMtdAk4ca4mZG3ytNzGzac-z79gpBvV4SeqhWSK4UakaAuJh_",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1gXhqkUbEcF7x1SnBGUq0IPsez9wtkYp3mjP3V-ej-ORQNnTv",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSPx2HomwOut_1Px4k25htU1e3UEeQ5nscHv-zvz30y0l1TKniVQ",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzg1nRE29B1Jt2uVJtbUGzpLY_VrbLyfr32bYpoT7lSRPAHSAF",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIV4mGu-Jez6WYpcLTNO5rUZkMj2ldkUeRSg9aBuhvXh4LXIfP",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzg1nRE29B1Jt2uVJtbUGzpLY_VrbLyfr32bYpoT7lSRPAHSAF",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlgcKHR4TO1SHV3uH8dgDwiaXfRB_A4p1qcxarGrmvkicMTkN0cw",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuK_qYifPCWLAHbVPfpzh25S2aI4aXiR-pnXHPtHljlwl87we7",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6MZ_sJd--OASUOMNakui3jAsh06YS5tiyI7fnYZUpzMxHBGe2_g",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfYB35iFfj_iMt0bb0BGm-gVOYoGMsXadvFQZo6o15zxw-MOmZ",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYNw9IxrqOD0YCXDYOzzQFvv-8h5btBaBYPmt9uy6hMBTUJHl",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR-eh1nC_ddzeEz9AWwm6cqfaED0BtUUD4PKbZMeKJVUYaVgI-",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0VE12kQ1GPhonPrv6lesEMxLeKf5EbH-fW94IzWs2RkWXW75g",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbxCVATFctzcCxwY4KvKb2L2SUYIct1otzVCORL7RNuFWt_7Lf",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK8laymHV1vVTD0fK1sLa_-FPQ-sS7EWAAqzpa4mv_AYBaEtDozA",
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbMP5N9brH2djTqaSVJ5XgMKKexBaJAVvUwjw3p8mZjzcU2MiO",
+];
+for(i=0;i<16;i++){
+	var suser = {
+		username: faker.internet.userName(),
+		type: "doctor",
+		fname: faker.name.firstName(),
+		lname: faker.name.lastName(),
+		email: faker.internet.email(),
+		contactnumber: faker.phone.phoneNumber(),
+		image: imgurl[i],
+		address: faker.address.streetAddress(),
+		description: faker.lorem.paragraph()
+	};
+    user.register(suser, "Arch1234" ,function(err, newlyCreated){
+        if(err){
+			console.log(err);
+			return res.render("signup");
+		}
+		else{
+				newlyCreated.schedule.push({
+				day :"monday",
+				from :"10",
+				to :"12"
+				});
+				newlyCreated.schedule.push({
+					day :"tuesday",
+					from :"11",
+					to :"13"
+				});
+				newlyCreated.save();
+		}
+    });
+}
 //COMPLETE
 
 app.use(function(req, res, next){
 res.locals.currentuser = req.user;
+res.locals.error = req.flash("error");
+res.locals.success = req.flash("success");
+res.locals.warning = req.flash("warning");
+res.locals.info = req.flash("success");
 next();
 });
 
@@ -187,7 +216,8 @@ app.get("/stats",isLoggedIn,isdoctor,function(req,res){
 app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, founddoctor){
         if(err){
-            console.log(err);
+			req.flash("error","Doctor Not Found");
+			res.redirect("back");
         } else {
 			var appo1 =[];
 			var appo2=[];
@@ -235,7 +265,8 @@ app.get("/doctorhome/date/:id",isLoggedIn,isdoctor,function(req,res){
 app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
 	user.findById(req.user._id).populate("appointments").exec(function(err, foundpatient){
         if(err){
-            console.log(err);
+            req.flash("error","Sorry!! An error occured");
+			res.redirect("back");
         } else {
             res.render("patienthome", {patient: foundpatient});
         }
@@ -258,7 +289,7 @@ app.post("/signup",function(req,res){
 	};
     user.register(suser, req.body.password ,function(err, newlyCreated){
         if(err){
-			console.log(err);
+			req.flash("error","A User With That Username Already Exists");
 			return res.render("signup");
 		}
 		passport.authenticate("local")(req, res, function(){
@@ -275,8 +306,8 @@ app.get("/details/:id",isLoggedIn,isdoctor,nodoctordes,function(req,res){
 app.post("/doctors/:id/deletereview",isLoggedIn,ispatient,function(req,res){
 	review.findByIdAndRemove(req.params.id,function(err){
 		if(err){
-			console.log(err);
-			res.redirect("/");
+			req.flash("error","Failed To Delete Review");
+			res.redirect("back");
 		}
 		else{
 			res.redirect("/doctors");
@@ -288,8 +319,11 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
     cloudinary.uploader.upload(req.file.path, function(result) {
       user.findById(req.params.id, function(err, founddoctor){
         if(err){
-            console.log("you have an error");
+            req.flash("error","An Error Occured!! Please Try Again Later");
+			res.redirect("back");
         } else {
+			if(result.secure_url)
+			{
 			founddoctor.image = result.secure_url;
 			founddoctor.image_id = result.public_id;
 			founddoctor.description=req.sanitize(req.body.description);
@@ -351,6 +385,11 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
                 }
 			founddoctor.save();
 			res.redirect("/aplist");
+			}
+			else{
+				req.flash("error","An Error Occured!! Please Try Again Later");
+				res.redirect("back");
+			}
 		}
 	});
     });
@@ -387,13 +426,16 @@ app.get("/doctors",function(req,res){
 app.get("/doctors/:id",function(req, res, next){
 	user.findById(req.params.id, function(err, doctor){
         if(err){
-            res.redirect("back");
+			req.flash("error","Doctor Not Found");
+			res.redirect("back");
         } else {
 			if(doctor.type=="doctor"&&doctor.address){
 				return next();
 			}
-			else
+			else{
+				req.flash("error","Doctor Not Found");
 			res.redirect("back");
+			}
         }
 });
 }, function(req, res){
@@ -416,7 +458,8 @@ app.get("/doctors/:id",function(req, res, next){
 app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
 	user.findById(req.params.id).populate("appointments").exec(function(err, foundpatient){
         if(err){
-            console.log(err);
+            req.flash("error","Patient Not Found");
+			res.redirect("back");
         } else {
             res.render("history", {patient: foundpatient});
         }
@@ -427,18 +470,24 @@ app.get("/doctors/:id/newreview",isLoggedIn,ispatient,
 function(req, res, next){
     appointment.find({doctorid:req.params.id,patientid:req.user._id},function(err, foundappointment){
         if(err){
-            console.log(err);
+			req.flash("error","An Error Occured!! Please Try Again");
+			res.redirect("back");
         } else {
 			var d=new Date();
 			if(!foundappointment[0])
-			res.redirect("back");
+			{
+				req.flash("warning","You Can Only Book Appointment After Your Appointment With This Doctor Is Complete");
+				res.redirect("back");
+			}
             else {
 				if(foundappointment[0].appointmentdate.getTime()<d.getTime())
 				{
-					console.log(foundappointment);
 					return next();
 				}
-				else res.redirect("back");
+				else{
+					req.flash("warning","You Can Only Book Appointment After Your Appointment With This Doctor Is Complete");
+					res.redirect("back");
+				}
         }}
     });
 }
@@ -456,8 +505,8 @@ function(req, res, next){
 app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 	user.findById(req.params.id, function(err, doctor){
 		if(err){
-			console.log(err);
-			res.redirect("/doctors");
+			req.flash("error","An Error Occured!! Please Try Again");
+			res.redirect("back");
 		} else {
 		 review.create(req.body.review, function(err, review){
 			if(err){
@@ -479,7 +528,8 @@ app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
  app.get("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
 		user.findById(req.params.id, function(err, doctor){
         if(err){
-            console.log(err);
+            req.flash("error","An Error Occured!! Please Try Again");
+			res.redirect("back");
         } else {
              res.render("bookappointment", {doctor: doctor});
         }
@@ -489,8 +539,8 @@ app.post("/doctors/:id/newreview",isLoggedIn,ispatient, function(req, res){
 app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res){
 	user.findById(req.params.id, function(err, doctor){
 		if(err){
-			console.log(err);
-			res.redirect("/doctors");
+			req.flash("error","An Error Occured!! Please Try Again");
+			res.redirect("back");
 		} else {
 		 appointment.create(
 			 {
@@ -503,14 +553,16 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 				patientid : req.user._id
 				}, function(err, appointment){
 			if(err){
-				console.log(err);
+				req.flash("error","An Error Occured!! Please Try Again");
+				res.redirect("back");
 			} else {
 				appointment.save();
 				doctor.appointments.push(appointment);
 				doctor.save();
 				req.user.appointments.push(appointment);
 				req.user.save();
-				res.render("booked");
+				req.flash("success","Your Appointment Request Has Been Sent .Please Wait For Confirmation");
+				res.redirect("/patienthome");
 			}
 		 });
 		}
@@ -520,8 +572,8 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
  app.post("/addappointment",isLoggedIn,isdoctor, function(req, res){
 	user.findById(req.user.id, function(err, doctor){
 		if(err){
-			console.log(err);
-			res.redirect("/");
+			req.flash("error","An Error Occured!! Please Try Again");
+				res.redirect("back");
 		} else {
 		 appointment.create(
 			 {
@@ -533,12 +585,15 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 				doctorid : doctor._id
 				}, function(err, appointment){
 			if(err){
-				console.log(err);
+				req.flash("error","An Error Occured!! Please Try Again");
+				res.redirect("back");
 			} else {
 				appointment.save();
 				doctor.appointments.push(appointment);
 				doctor.save();
-				res.redirect("/aplist");
+				req.flash("success","Appointment Added Successfully");
+				res.redirect("back");
+				res.redirect("/doctorhome/date/"+req.body.appointmentdate.getTime());
 			}
 		 });
 		}
@@ -556,7 +611,8 @@ app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 	var pm = { id : req.params.id };
 	appointment.findById(req.params.id,function(err, foundappointment){
         if(err){
-            console.log(err);
+            req.flash("error","Appointment Not Found");
+			res.redirect("back");
         } else {
             res.render("appointmentdetails", {appointment: foundappointment,pm : pm });
         }
@@ -566,14 +622,16 @@ app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 	appointment.findById(req.params.id,function(err, foundappointment){
         if(err){
-            console.log(err);
+            req.flash("error","Appointment Not Found");
+				res.redirect("back");
         } else {
 			if(req.body.status=="C")
 			{
 				foundappointment.status="C";
 				foundappointment.time=req.sanitize(req.body.time);
 				foundappointment.save();
-				res.redirect("/aplist");
+				req.flash("success","Appointment Details Updated");
+				res.redirect("back");
 			}
 			if(req.body.status=="R")
 			{
@@ -585,7 +643,8 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
        					 } else {
 						  founddoctor.appointments.pop(foundappointment);
 						  founddoctor.save();
-          				  res.redirect("/aplist");
+						  req.flash("success","Appointment Details Updated");
+						  res.redirect("back");
        					 }
    					 });
 			}
@@ -596,7 +655,8 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 				foundappointment.prescription=req.sanitize(req.body.prescription);
 				foundappointment.billamount=req.sanitize(req.body.billamount);
 				foundappointment.save();
-				res.redirect("/aplist");
+				req.flash("success","Appointment Details Updated");
+				res.redirect("back");
 			}
         }
     });
@@ -605,7 +665,8 @@ app.post("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
 	appointment.findById(req.params.id,function(err, foundappointment){
         if(err){
-            console.log(err);
+            req.flash("error","Appointment Not Found");
+			res.redirect("back");
         } else {
             res.render("adp", {appointment: foundappointment });
         }
@@ -615,39 +676,41 @@ app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
-    }
+	}
+	req.flash("error","You Need To Login To Perform That");
     res.redirect("/signin");
 }
 
 function nouser(req, res, next){
     if(!req.user){
         return next();
-    }
-    res.redirect("/");
+	}
+	req.flash("error","You Need To Log Out First");
+    res.redirect("back");
 }
 
 function isdoctor(req, res, next){
-    if(req.isAuthenticated()){
 		if(req.user.type=="doctor"){
-        return next();}
-    }
-    res.redirect("/signin");
+        return next();
+	}
+	req.flash("info","Only Doctors Can Access That Page");
+    res.redirect("back");
 }
 
 function nodoctordes(req, res, next){
-    if(req.isAuthenticated()){
 		if(req.user.type=="doctor"&&!req.user.description){
-        return next();}
-    }
-    res.redirect("/signin");
+        return next();
+	}
+	req.flash("info","You Already Have Filled Description");
+    res.redirect("back");
 }
 
 function ispatient(req, res, next){
-    if(req.isAuthenticated()){
 		if(req.user.type=="patient"){
-        return next();}
-    }
-    res.redirect("/signin");
+		return next();
+	}
+	req.flash("info","Only Doctors Can Access That Page");
+    res.redirect("back");
 }
 
 function escapeRegex(text) {

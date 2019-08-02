@@ -109,6 +109,30 @@
                     </div>
                 </div>
             </nav>
+            <% console.log(error); %>
+            <div class="container">
+        
+                <% if(error && error.length > 0){ %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
+                    </div>
+                <% } %>
+                <% if(success && success.length > 0){ %>
+                    <div class="alert alert-success" role="alert">
+                        <%= success %>
+                    </div>
+                <% } %>
+                <% if(warning && warning.length > 0){ %>
+                    <div class="alert alert-warning" role="alert">
+                        <%= warning %>
+                    </div>
+                <% } %>
+                <% if(info && info.length > 0){ %>
+                    <div class="alert alert-info" role="alert">
+                        <%= info %>
+                    </div>
+                <% } %>
+            </div>
   <div class="container">   
     <div class="x">    
             <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
