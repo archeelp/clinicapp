@@ -110,6 +110,7 @@
                 </div>
             </nav>
   <div class="container">   
+      <h1></h1>
     <div class="x">    
             <img class="img" class="img-responsive" src="<%= doctor.image %>" width="200px" height="500px"><br>
             </div>
@@ -193,8 +194,8 @@
             map: map,
             zoom: 15,
             center: {
-            latitude: <%-JSON.stringify(loc.y);%>,
-            longitude: <%-JSON.stringify(loc.x);%>
+            latitude: <%-JSON.stringify(doctor.loc.y);%>,
+            longitude: <%-JSON.stringify(doctor.loc.x);%>
             }
         });
 
@@ -210,8 +211,8 @@
             },
             geometry: {
             type: "point",
-            latitude: <%-JSON.stringify(loc.y);%>,
-            longitude: <%-JSON.stringify(loc.x);%>
+            latitude: <%-JSON.stringify(doctor.loc.y);%>,
+            longitude: <%-JSON.stringify(doctor.loc.x);%>
             },
             popupTemplate: {
             title: "Doctors Address : "+ <%-JSON.stringify(doctor.address);%>

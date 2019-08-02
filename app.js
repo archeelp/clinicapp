@@ -294,6 +294,11 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
 			founddoctor.image_id = result.public_id;
 			founddoctor.description=req.sanitize(req.body.description);
 			founddoctor.address = req.sanitize(req.body.address);
+			geocode(founddoctor.address)
+			.then((response) => {
+				founddoctor.loc.x = response.candidates[0].location.x;
+				founddoctor.loc.y = response.candidates[0].location.y;
+			});			
 			if(req.body.id0 == "on")
 				{
 					founddoctor.schedule.push({
@@ -401,14 +406,15 @@ app.get("/doctors/:id",function(req, res, next){
         if(err){
             console.log(err);
         } else {
-			geocode(founddoctor.address)
-			.then((response) => {
-			  loc={x:response.candidates[0].location.x,
-				y:response.candidates[0].location.y}; 
-				res.render("show", {
-					doctor: founddoctor,loc:loc
-				});
-			});
+			// geocode(founddoctor.address);
+			// .then((response) => {
+			//   loc={x:response.candidates[0].location.x,
+			// 	y:response.candidates[0].location.y}; 
+			// 	res.render("show", {
+			// 		doctor: founddoctor,loc:loc
+			// 	});
+			// });
+			res.render("show", {doctor: founddoctor});
         }
     });
 });
