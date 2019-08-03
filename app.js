@@ -430,8 +430,9 @@ app.post("/signup",function(req,res){
 			req.flash("error","A User With That Username Already Exists");
 			return res.render("signup");
 		}
-		passport.authenticate("local")(req, res, function(){
-			res.redirect("/signin");
+		passport.authenticate("user")(req, res, function(){
+			req.flash("success","Sign Up Successful");
+			res.redirect("/");
 		});
     });
 });
@@ -744,11 +745,18 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
  });
 
  app.post("/signin",nouser, passport.authenticate("user", 
-    {
-        successRedirect: "/",
-        failureRedirect: "/signin"
-    }), function(req, res){
+ {
+	 successRedirect: "/",
+	 failureRedirect: "/signin"
+ }), function(req, res){
 });
+
+//  app.post("/signin",nouser, passport.authenticate("user"), function(req, res){
+// 	 if(req.isAuthenticated){
+// 		req.flash("success","Sign In Successful");
+// 		res.redirect("/");
+// 	 }
+// });
 
 app.get("/doctorhome/:id",isLoggedIn,isdoctor, function(req, res){
 	var pm = { id : req.params.id };
