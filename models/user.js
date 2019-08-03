@@ -16,9 +16,10 @@ var userSchema = new mongoose.Schema({
 	authenticationKey: String,
     description: String,
     address: String,
-    loc:[{
+    loc:{
         x:String,
-        y:String}],
+        y:String
+    },
     schedule : [
         {
             day : String,
