@@ -379,6 +379,7 @@ app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
 
 app.get("/logout",isLoggedIn,function(req,res){
 	req.logout();
+	req.flash("success","Logged Out Successfully");
 	res.redirect("/");
 });
 
@@ -430,7 +431,6 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
 			{		geocode(req.sanitize(req.body.address)).then((response) => {
 						founddoctor.loc.x = response.candidates[0].location.x;
 						founddoctor.loc.y = response.candidates[0].location.y;
-						console.log(founddoctor.loc);
 						founddoctor.image = result.secure_url;
 						founddoctor.image_id = result.public_id;
 						founddoctor.description=req.sanitize(req.body.description);
@@ -491,6 +491,7 @@ app.post("/details/:id",isLoggedIn,isdoctor,nodoctordes, upload.single('image'),
 							});
 							}
 						founddoctor.save();
+						req.flash("success","Details Added Successfully");
 						res.redirect("/aplist");
 					});
 			}
