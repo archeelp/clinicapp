@@ -111,46 +111,76 @@ var imgurl =[
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK8laymHV1vVTD0fK1sLa_-FPQ-sS7EWAAqzpa4mv_AYBaEtDozA",
 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbMP5N9brH2djTqaSVJ5XgMKKexBaJAVvUwjw3p8mZjzcU2MiO",
 ];
-for(i=0;i<1;i++){
-	var suser = {
-		username: faker.internet.userName(),
-		type: "doctor",
-		fname: faker.name.firstName(),
-		lname: faker.name.lastName(),
-		email: faker.internet.email(),
-		contactnumber: faker.phone.phoneNumber(),
-		image: imgurl[i],
-		address: faker.address.streetAddress(),
-		description: faker.lorem.paragraph()
-	};		
-			geocode(suser.address).then((response) => {
-				Object.assign(suser, {
-					loc: {
-						x: response.candidates[0].location.x,
-						y: response.candidates[0].location.y
-					}
-				})
-				// console.log(suser.loc.x + " Inside " + suser.loc.y); 
-					user.register(suser, "Arch1234" ,function(err, newlyCreated){
-						if(err){
-							console.log(err);
-							return res.render("signup");
+for(i=0;i<10;i++){
+		var suser = {
+			username: faker.internet.userName(),
+			type: "doctor",
+			fname: faker.name.firstName(),
+			lname: faker.name.lastName(),
+			email: faker.internet.email(),
+			contactnumber: faker.phone.phoneNumber(),
+			image: imgurl[i],
+			address: faker.address.streetAddress(),
+			description: faker.lorem.paragraph()
+		};
+		user.register(suser, "Arch1234" ,function(err, newlyCreated){
+			if(err){
+				console.log(err);
+				return res.render("signup");
+			}
+			else{
+				console.log("Registered")
+				geocode(newlyCreated.address).then((response) => {
+					Object.assign(newlyCreated, {
+						loc: {
+							x: response.candidates[0].location.x,
+							y: response.candidates[0].location.y
 						}
-					else{
-							newlyCreated.schedule.push({
-							day :"monday",
-							from :"10",
-							to :"12"
-							});
-							newlyCreated.schedule.push({
-								day :"tuesday",
-								from :"11",
-								to :"13"
-							});
-							newlyCreated.save();
-					}
+						
+					})
+					console.log("x and y assigned")
+					
+					newlyCreated.schedule.push({
+						day :"monday",
+						from :"10",
+						to :"12"
+						});
+						newlyCreated.schedule.push({
+							day :"tuesday",
+							from :"11",
+							to :"13"
+						});
+						newlyCreated.save();
 				});
-			});
+				
+			}
+		});
+		
+	
+	// var suser = {
+	// 	username: faker.internet.userName(),
+	// 	type: "doctor",
+	// 	fname: faker.name.firstName(),
+	// 	lname: faker.name.lastName(),
+	// 	email: faker.internet.email(),
+	// 	contactnumber: faker.phone.phoneNumber(),
+	// 	image: imgurl[i],
+	// 	address: faker.address.streetAddress(),
+	// 	description: faker.lorem.paragraph()
+	// };		
+			// geocode(suser.address).then((response) => {
+			// 		test = response;
+			// 		Object.assign(suser, {
+			// 			loc: {
+			// 				x: response.candidates[0].location.x,
+			// 				y: response.candidates[0].location.y
+			// 			}
+			// 		})
+			// 		console.log(suser.loc.x + " Inside " + suser.loc.y);
+			// 	})
+				// console.log(test);
+				 
+					
 		
 }
 //COMPLETE
