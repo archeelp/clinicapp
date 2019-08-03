@@ -1,0 +1,42 @@
+<% include partials/header %>
+<style>
+    .container {
+        text-align: center;
+    }
+    .align-left {
+        text-align: left;
+    }
+    .width {
+        width: 100%;
+    }
+    label {
+        font-size: 125%;
+    }
+    legend {
+        font-size: 125%;
+    }
+    span {
+        font-size: 150%;
+    }
+    input[type="text"] {
+        display: none;
+    }
+    .container {
+        width: 70%;
+    }
+</style>
+<div class="container">
+    <div class="container">
+    <h1><legend>Feedback Form</legend></h1>
+    <form id="form" method="POST" action="/feedback">
+        <div class="form-group">
+            <input type="text" name="feedback[username]" value="<%= currentuser.username%>">
+          <div class="width">
+          <textarea name="feedback[feedback]" form="form" placeholder="Feedback" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary"><span>Submit</span></button>
+    </form>
+    </div>
+</div>
+<% include partials/footer %>
