@@ -16,6 +16,20 @@
     .jumbotron {
         background-color: rgba(255, 250, 250, 0);
     }
+    footer {
+        background-color: #212121;
+    }
+    #logof {
+        font-family: 'Courgette', cursive;
+        font-size: 500%;
+        margin-top: 3%;
+        color: white;
+    }
+    .link {
+        margin: 4% 0 4% 0;
+        font-weight: bold;
+        font-size: 125%;
+    }
 </style>
 <div class="main-body">
  <div class="container">
@@ -43,5 +57,43 @@
        </div>
 </header>
 </div>
+
+<footer class="page-footer font-small blue pt-4">
+
+    <!-- Footer Links -->
+    <div class="container-fluid text-center text-md-left">
+  
+      <!-- Grid row -->
+      <div class="row">
+  
+        <!-- Grid column -->
+        <div class="col-md-6 mt-md-0 mt-3">
+  
+          <!-- Content -->
+          <p id="logof" class>ClinicApp</p>
+  
+        </div>
+        <!-- Grid column -->
+  
+        <!-- Grid column -->
+        <div class="col-md-5 mb-md-0 mb-5">
+
+          <ul class="list-unstyled">
+            <li class="link">
+              <a href="/about">About Us</a>
+            </li>
+            <li class="link">
+              <a href="/feedback">Leave Feedback</a>
+            </li>
+          </ul>
+  
+        </div>
+      </div>
+      <!-- Grid row -->
+  
+    </div>
+    <!-- Footer Links -->
+  
+  </footer>
 
 <% include partials/footer %>
