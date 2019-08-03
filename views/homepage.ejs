@@ -30,6 +30,12 @@
         font-weight: bold;
         font-size: 125%;
     }
+    .lin {
+        
+        font-weight: bold;
+        font-size: 125%;
+        margin-top: 9%;
+    }
 </style>
 <div class="main-body">
  <div class="container">
@@ -79,12 +85,19 @@
         <div class="col-md-5 mb-md-0 mb-5">
 
           <ul class="list-unstyled">
-            <li class="link">
-              <a href="/about">About Us</a>
-            </li>
-            <li class="link">
-              <a href="/feedback">Leave Feedback</a>
-            </li>
+            
+            <%if(currentuser) {%>
+                <li class="link">
+                    <a id="about" href="/about">About Us</a>
+                </li>
+                <li class="link">
+                    <a href="/feedback">Leave Feedback</a>
+                 </li>
+            <%} else {%>
+                <li class="lin">
+                    <a  href="/about">About Us</a>
+                </li>
+            <%}%>
           </ul>
   
         </div>
@@ -95,5 +108,6 @@
     <!-- Footer Links -->
   
   </footer>
-
+<script>
+</script>
 <% include partials/footer %>
