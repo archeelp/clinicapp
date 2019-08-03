@@ -180,7 +180,7 @@
         </div><% } %>
             <% if((!currentuser)||(currentuser.type=="patient")) {%>
             <div>
-                    <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book Appointment</a>
+                    <a class="btn btn-success" href="/doctors/<%= doctor._id %>/bookappointment">Book An Appointment</a>
             </div>
             <% } %>
             <%
@@ -208,7 +208,7 @@
             <% }) %>
             <% if((!currentuser)||(currentuser.type=="patient")) {%>
             <p>
-                <a id="button" class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
+                <a class="btn btn-success" href="/doctors/<%= doctor._id %>/newreview">Leave a review</a>
             </p>
             </div>
             <% }%>
