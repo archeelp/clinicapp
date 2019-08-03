@@ -182,7 +182,7 @@ cloudinary.config({
 				 
 					
 		
-}
+//}
 //COMPLETE
 
 app.use(function(req, res, next){
