@@ -18,7 +18,8 @@ var express					= require("express"),
 	flash       			= require("connect-flash"),
 	databaseURL 			= process.env.DATABASEURL || 'mongodb://localhost/clinicapp';
 	arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding'),
-	{ geocode } = arcgisRestGeocoding;
+	{ geocode } = arcgisRestGeocoding,
+	secret=process.env.SECRET||"We are clinicapp devlopers";
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
 app.use(express.static('pubic'));
@@ -61,9 +62,9 @@ var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 var cloudinary = require('cloudinary');
 cloudinary.config({ 
-  cloud_name: 'dp71ux6po', 
-  api_key: '373788194924911', 
-  api_secret: '5Lvzuy5445yWBYP0HlyyF8b3EPI'
+  cloud_name: process.env.cloud_name, 
+  api_key: process.env.api_key, 
+  api_secret: process.env.api_secret
 });
 
 //MULTER AND CLOUDINARY CONFIGURATION COMPLETE
