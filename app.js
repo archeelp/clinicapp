@@ -911,8 +911,8 @@ function ispatient(req, res, next){
     res.redirect("back");
 }
 
-function ispatient(req, res, next){
-	if(req.user.type=="patient"){
+function isadmin(req, res, next){
+	if(req.user.type=="admin"){
 	return next();
 }
 req.flash("info","Only Admins Can Access That Page");
