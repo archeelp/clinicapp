@@ -230,10 +230,15 @@ app.get("/feedback", isLoggedIn, function(req, res) {
 
 app.post("/feedback", function(req, res) {
 	feedback.create(req.body.feedback, function(err, newfeedback) {
-		if(err) console.log(err);
-		else console.log(newfeedback);
+		if(err||!newfeedback) {
+			req.flash("error","An error occured while submittng your feedback please try again later");
+			res.redirect("back");
+		}
+		else {
+			req.flash("success","Feedback submitted successfully ");
+		}
 	});
-	res.redirect("/")
+	res.redirect("/");
 });
 
 app.post("/profileupdate",isLoggedIn,isdoctor,function(req,res){
@@ -439,6 +444,17 @@ app.get("/patienthome",isLoggedIn,ispatient,function(req,res){
             res.render("patienthome", {patient: foundpatient});
         }
     });
+});
+
+app.get("/admin",isLoggedIn,isadmin,function(req,res){
+	feedback.find({}, function(err, allfeedbacks){
+		if(err||!allfeedbacks){
+			req.flash("info","No feedback found");
+			res.redirect("/");
+		} else {
+		   res.render("admin",{feedbacks:allfeedbacks});
+		}
+	 });
 });
 
 app.get("/logout",isLoggedIn,function(req,res){
@@ -893,6 +909,14 @@ function ispatient(req, res, next){
 	}
 	req.flash("info","Only Doctors Can Access That Page");
     res.redirect("back");
+}
+
+function ispatient(req, res, next){
+	if(req.user.type=="patient"){
+	return next();
+}
+req.flash("info","Only Admins Can Access That Page");
+res.redirect("back");
 }
 
 function escapeRegex(text) {

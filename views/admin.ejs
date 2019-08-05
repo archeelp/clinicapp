@@ -1,0 +1,15 @@
+<% include partials/header %>
+<h1>FEEDBACKS</h1>
+            <% feedbacks.forEach(function(feedback){ %>
+                <div>
+                <h3 style="font-size: 125%;">
+                    <strong><%= feedback.username %></strong> 
+                </h3>
+                <h3 style="font-size: 125%;">
+                    <strong><%= feedback.feedback %></strong> 
+                </h3> 
+                <br>
+                </div>
+            <% }) %>
+<% include partials/footer %>
+            

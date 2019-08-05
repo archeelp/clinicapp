@@ -41,6 +41,10 @@
                             <li><a href="#">Signed In As <%= currentuser.fname %></a></li>
                             <li><a href="/patienthome">My Appointments</a></li>
                         <% } %>
+                        if(currentuser.type == "admin"){ %>
+                            <li><a href="#">Signed In As Admin</a></li>
+                            <li><a href="/admin">Feedbacks</a></li>
+                        <% } %>
                     <li><a href="/logout">Logout</a></li>
                     <% } %>
                 </ul>
