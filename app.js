@@ -659,30 +659,23 @@ app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
     });
 });
 
-app.get("/doctors/:id/newreview",isLoggedIn,ispatient,
+app.get("/doctors/:id/:id2/newreview",isLoggedIn,ispatient,
 function(req, res, next){
-    appointment.find({doctorid:req.params.id,patientid:req.user._id},function(err, foundappointment){
-        if(err||!foundappointment){
-			req.flash("error","An Error Occured!! Please Try Again");
-			res.redirect("back");
-        } else {
-			var d=new Date();
-			if(!foundappointment[0])
+   appointment.findById(req.params.id2,function(err,foundappointment){
+	if(err||!foundappointment){
+		req.flash("error","an error occured")
+	} else {
+		if(foundappointment.status=="CNF")
+		{
+			return next();
+		}
+		else
 			{
-				req.flash("warning","You Can Only Book Appointment After Your Appointment With This Doctor Is Complete");
+				req.flash("error","You can leave a review only after your appointment is completed");
 				res.redirect("back");
-			}
-            else {
-				if(foundappointment[0].appointmentdate.getTime()<d.getTime())
-				{
-					return next();
-				}
-				else{
-					req.flash("warning","You Can Only Book Appointment After Your Appointment With This Doctor Is Complete");
-					res.redirect("back");
-				}
-        }}
-    });
+		 }
+	}
+   });
 }
 ,function(req, res){
     // find doctor by id
