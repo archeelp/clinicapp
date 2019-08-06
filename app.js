@@ -228,8 +228,10 @@ app.get("/feedback", isLoggedIn, function(req, res) {
 	res.render("feedback");
 });
 
-app.post("/feedback", function(req, res) {
-	feedback.create(req.body.feedback, function(err, newfeedback) {
+app.post("/feedback",isLoggedIn, function(req, res) {
+	var fb=req.sanitize(req.body.feedback.feedback),
+	un=req.sanitize(req.body.feedback.username);
+	feedback.create({feedback:fb,username:un}, function(err, newfeedback) {
 		if(err||!newfeedback) {
 			req.flash("error","An error occured while submittng your feedback please try again later");
 			res.redirect("back");
@@ -648,7 +650,7 @@ app.get("/doctors/:id",function(req, res, next){
 
 app.get("/history/:id", isLoggedIn,isdoctor,function(req, res){
 	user.findById(req.params.id).populate("appointments").exec(function(err, foundpatient){
-        if(err||!foundappointment){
+        if(err||!foundpatient){
             req.flash("error","Patient Not Found");
 			res.redirect("back");
         } else {
