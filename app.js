@@ -873,6 +873,11 @@ app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
     });
 });
 
+app.get("/*", function(req, res){
+	req.flash("error","Error 404! The page you are looking for is not found.");
+	res.redirect("/");
+});
+
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
