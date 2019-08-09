@@ -47,7 +47,7 @@
          <%}
         else{%>
             <div class="container">
-                    <h1>Welcome To <span>ClinicApp </span><%= currentuser.fname.toUpperCase()%> </h1>
+                    <h1>Welcome To <span>ClinicApp</span><%= currentuser.fname.toUpperCase()%> </h1>
                </div>
         <%}%>
         </header>
@@ -85,12 +85,19 @@
         <div class="col-md-5 mb-md-0 mb-5">
 
           <ul class="list-unstyled">
+            
+            <%if(currentuser) {%>
                 <li class="link">
                     <a id="about" href="/about">About Us</a>
                 </li>
                 <li class="link">
                     <a href="/feedback">Leave Feedback</a>
                  </li>
+            <%} else {%>
+                <li class="lin">
+                    <a  href="/about">About Us</a>
+                </li>
+            <%}%>
           </ul>
   
         </div>
