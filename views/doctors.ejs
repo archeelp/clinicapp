@@ -39,7 +39,7 @@
                         <%}%>
                     </p> 
                     <p style="font-size: 140%;">
-                        <%= doctor.address%>
+                        <%= String(doctor.address).slice(0,20) %>
                     </p>
                    <p>
                        <a href="/doctors/<%= doctor.id %>" class="btn btn-primary">More Info</a>
