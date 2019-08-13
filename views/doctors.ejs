@@ -39,7 +39,15 @@
                         <%}%>
                     </p> 
                     <p style="font-size: 140%;">
+<<<<<<< HEAD
                         <%= String(doctor.address).slice(0,20) +"..." %>
+=======
+                        <% if(String(doctor.address).length > 40) {%>
+                            <%= String(doctor.address).slice(0,40) + "..." %>
+                            <%} else{%>
+                            <%= String(doctor.address)%>
+                            <%}%>
+>>>>>>> dc8e7fa7e8cb16fcbc1f8ec4aeb86895b8784cfb
                     </p>
                    <p>
                        <a href="/doctors/<%= doctor.id %>" class="btn btn-primary">More Info</a>
