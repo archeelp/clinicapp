@@ -16,7 +16,7 @@ var express					= require("express"),
 	days 					=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
 	faker 					= require("faker"),
 	flash       			= require("connect-flash"),
-	databaseURL 			= process.env.DATABASEURL || 'mongodb://localhost/clinicapp';
+	databaseURL 			= "mongodb+srv://yogesh-rd:yrd12345@cluster0.h28wg.mongodb.net/?retryWrites=true&w=majority";
 	arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding'),
 	{ geocode } = arcgisRestGeocoding,
 	secret=process.env.SECRET||"We are clinicapp devlopers";
